@@ -1,0 +1,223 @@
+body {
+  background-color: #FFF;
+  padding: 20px;
+  margin: 0;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+h1, h2, p, ul, li {
+  font-family: sans-serif;
+}
+
+.container, .container-fluid {
+  margin-top: 20px;
+}  
+
+nav.header li {
+ /* display: inline;*/
+  list-style-type: none;
+  margin: 0;
+}
+nav.header {
+  background-color: Grey;
+  padding: 0;
+  text-align: right;
+  font-weight: bold;
+}
+nav.header li a {
+  color: #FFF;
+  font-weight: bold;
+}
+ul.footer li {
+  display: inline;
+  list-style-type: none;
+  color: #FFF;
+}
+ul.footer {
+  background-color: #111;
+  text-align: right;
+}
+ul.footer li a {
+  color: #FFF;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 0.4em;
+  display: inline-block;
+}
+.content {
+  background-color: #FFF;
+  padding: 20px;
+}
+.content h2 {
+  padding: 0;
+  margin: 0;
+}
+.content li {
+  margin-bottom: 10px;
+}
+.active {
+  background-color: #0099FF;
+}
+.container, .container-fluid {
+  margin: 0 0 0 0;
+}
+.dropdown{
+  display:inline-block;
+}
+.dropdown button {
+  background-color: #111;
+  border-color: #111;
+  font-weight: bold;
+  font-family: sans-serif;
+}
+.dropdown-menu {
+  display:none;
+  background-color:none;
+  border:none;
+}
+.btn-primary{
+  background-color:#0099ff;
+  border-color:#0099ff;
+}
+.btn-primary:hover {
+  color:#FFF;
+  background-color:#0099ff;
+  border-color:#0099ff;
+}
+
+.hide-true  {
+  display: none;
+}
+
+.monthPickerClass {
+  width:16em;
+  height:2em;
+  border:none;
+}
+
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -1px;
+}
+
+.datePicker {
+  width: 16em;
+  height: 2.1em;
+  border: none;
+}
+
+/*Date Picker*/
+.react-month-picker {}
+.react-month-picker .calendar-container {
+  width: 360px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  background: #fff;
+  border: 2px solid #eee;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+/*  SECTIONS  */
+.react-month-picker .section_mp {
+  clear: both;
+  padding: 0px;
+  margin: 0px;
+}
+
+/*  COLUMN SETUP  */
+.react-month-picker .col_mp {
+  display: block;
+  float: left;
+  text-align: center;
+}
+.react-month-picker .col_mp:first-child {
+  margin-left: 0;
+}
+
+/*  GROUPING  */
+.react-month-picker .group_mp:before, .react-month-picker .group:after {
+  content: "";
+  display: table;
+}
+.react-month-picker .group_mp:after {
+  clear: both;
+}
+.react-month-picker .group_mp {
+  zoom: 1; /* For IE 6/7 */
+}
+
+/*  GRID OF THREE  */
+.react-month-picker .span_1_of_3_mp {
+  width: 33.33%;
+}
+.react-month-picker .col_mp {
+  font-size: 16px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+.react-month-picker .col_mp:hover {
+  color: white;
+  background-color: darkslateblue;
+  cursor: pointer;
+}
+.react-month-picker .calendar-container.readonly .col_mp:hover {
+  background-color: transparent;
+  cursor: default;
+  color: inherit;
+}
+.react-month-picker .selected_date_mp {
+  font-size: 12px;
+  color: darkslateblue;
+  font-weight: bold;
+}
+.react-month-picker .selected_cell {
+  background-color: darkslateblue;
+  font-style: italic;
+  color: #fff;
+}
+.react-month-picker .arrows_mp {
+  font-weight: bold;
+  font-size: 18px;
+}
+.react-month-picker .month-input.readonly {
+  background-color: #eee;
+}
+.starAlign-att {
+  margin-left: -7em;
+}
+.starAlign-hw {
+  margin-left: -5em;
+}
+.starAlign-dis {
+  margin-left: -5em;
+}
+.star-caption-att {
+  font-size: 1rem; 
+   margin-left: 10em;
+   font-weight: bold;
+}
+.star-caption-hw {
+  font-size: 1rem; 
+   margin-left: 11.5em;
+   font-weight: bold;
+}
+.star-caption-dis{
+  font-size: 1rem; 
+   margin-left: 12em;
+   font-weight: bold;
+}
+.goButton{
+  margin-top:1.6em;
+}
