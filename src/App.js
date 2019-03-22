@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import {
   Route,
-  NavLink,
-  BrowserRouter as Router, Switch
+  BrowserRouter as Router
 } from "react-router-dom";
-import {Dropdown, DropdownButton, Navbar, Nav, NavDropdown} from "react-bootstrap";
+import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import Dashboard from "./Dashboard";
 import Report from "./Report";
 import headerLogo from './images/logo.jpg';
@@ -27,7 +26,6 @@ import RoleList from "./explore/RoleList";
 import RoleEdit from "./explore/RoleEdit";
 import "./cssstyles/Common.css";
 import "./cssstyles/index.css";
-//import OutCarousel from "./OutCarousel"
 class App extends Component {
   render (){
     return (
@@ -54,7 +52,6 @@ class App extends Component {
               </Navbar.Collapse>
             </Navbar>
             <div className="dashboard">
-             
               <Route exact path="/login" component={Login}/>
               <Route path="/dashboard" component={Dashboard}/>
               <Route path="/report" component={Report}/>

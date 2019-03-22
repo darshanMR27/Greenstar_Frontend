@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Link, BrowserRouter as Router} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
-//import AppNavbar from './AppNavbar';
 import Select from 'react-select';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@kenshooui/react-multi-select/dist/style.css";

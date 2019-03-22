@@ -1,17 +1,14 @@
 import React, {Component} from 'react';
-import { Button, Input, ButtonGroup, FormGroup, Form, Container, Label } from 'reactstrap';
+import { Button, Input, FormGroup, Form, Container, Label } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
 function validate(email, password) {
     // we are going to store errors for all fields
     // in a signle array
-    alert(email);
     const errors = [];
     if(email === '' || email === "undefined"){
-        alert('111111');
         errors.push("Email cannot be empty");
     } else {
-        alert('22222');
         if (email.length < 5) {
             errors.push("Email should be at least 5 charcters long");
         }
@@ -59,14 +56,10 @@ class Login extends Component {
     handleSubmit = async () => {
         
         const { email, password} = this.state;
-        alert(email);
-        alert(password);
         const errors = validate(email, password);
        // this.props.onChange(this.state.email);
        //alert(errors);
-        alert(errors.length);
         if (errors.length > 0) {
-           alert('inside erross 21121');
             this.setState({ errors });
             return false;
          } 

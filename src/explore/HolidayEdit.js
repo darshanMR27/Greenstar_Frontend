@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Link, withRouter, BrowserRouter as Router} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
-//import AppNavbar from './AppNavbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@kenshooui/react-multi-select/dist/style.css";
 import DatePicker from "react-datepicker";
@@ -60,7 +59,7 @@ class HolidayEdit extends Component {
   //   alert('Section = '+selectedSection.label);
   //   alert('Group = '+groupName);
     
-    await fetch('/api/school', {
+    await fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/holiday/new', {
       method: (item.id) ? 'PUT' : 'POST',
       headers: {
         'Accept': 'application/json',
@@ -68,7 +67,6 @@ class HolidayEdit extends Component {
       },
       body: JSON.stringify(item),
     });
-    this.props.history.push('/schools');
   }
 
   render() {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, ButtonGroup, Container, Table, Input, Form, FormGroup, Label} from 'reactstrap';
+import { Button, ButtonGroup, Container, Table, Form, FormGroup, Label} from 'reactstrap';
 import { Link } from 'react-router-dom';
 import Select from 'react-select';
 import 'bootstrap/dist/css/bootstrap.min.css';

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import { Button, ButtonGroup, Container, Table, Input, Form, FormGroup, Label} from 'reactstrap';
+import { Button, Label} from 'reactstrap';
 import Select from 'react-select';
-//import Picker from 'react-month-picker';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@kenshooui/react-multi-select/dist/style.css";

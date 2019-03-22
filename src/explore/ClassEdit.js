@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, BrowserRouter as Router} from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 //import AppNavbar from './AppNavbar';
 import Select from 'react-select';
@@ -77,8 +77,8 @@ class ClassEdit extends Component {
   //  alert('Grade = '+selectedGrade.label);
   //   alert('Section = '+selectedSection.label);
   //   alert('Group = '+groupName);
-    
-    await fetch('/api/class', {
+    alert(item.id);
+    await fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080//api/v1/class', {
       method: (item.id) ? 'PUT' : 'POST',
       headers: {
         'Accept': 'application/json',

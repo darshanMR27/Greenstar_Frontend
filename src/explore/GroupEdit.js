@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Link, withRouter, BrowserRouter as Router} from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
-//import AppNavbar from './AppNavbar';
 import Select from 'react-select';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@kenshooui/react-multi-select/dist/style.css";
@@ -78,7 +77,9 @@ class GroupEdit extends Component {
 
   handleEditSchoolChange = (selectedSchool) => {
     const selectedSchoolName = selectedSchool.name;
+    const selectedSchoolId = selectedSchool.id;
     this.setState({selectedSchoolName });
+    this.setState({selectedSchoolId });
     return axios.get(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/class/school/`+selectedSchool.id)
       .then(result => {
         console.log(result);
@@ -93,7 +94,9 @@ class GroupEdit extends Component {
   }
   handleEditClassChange = (selectedGrade) => {
     const selectedGradeValue = selectedGrade.name;
+    const selectedClassId = selectedGrade.id;
     this.setState({selectedGradeValue });
+    this.setState({selectedClassId });
     return axios.get(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/section/class/`+selectedGrade.id)
       .then(result => {
         console.log(result);
@@ -115,7 +118,9 @@ class GroupEdit extends Component {
 
   handleEditSectionChange = (selectedSection) => {
     const selectedSectionName = selectedSection.name;
-    this.setState({selectedSectionName });
+    const selectedSectionId = selectedSection.id;
+    this.setState({selectedSectionName});
+    this.setState({selectedSectionId});
       return axios.get(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/student/section/`+selectedSection.id)
       .then(result => {
         console.log(result);
@@ -153,12 +158,16 @@ class GroupEdit extends Component {
         body: JSON.stringify(bodyFormData),
       });
     } else {
-      const {selectedSchool, selectedGrade, selectedSection, groupName } = this.state;
-       bodyFormData.set('schoolName', this.state.selectedSchoolName);
+      const {selectedClassId, selectedSectionId, selectedSchoolId, groupName } = this.state;
+      alert('section  = '+selectedSectionId);
+      alert('class= '+selectedClassId);
+      alert('school  = '+selectedSchoolId);
+      alert('groupName = '+groupName);
+       bodyFormData.set('schoolName', selectedSectionId);
         bodyFormData.set('grade', this.state.selectedGradeValue);
         bodyFormData.set('sectionName', this.state.selectedSectionName);
         bodyFormData.set('name', groupName);
-        console.log('Darshan = '+bodyFormData);
+        console.log('Darshan = '+bodyFormData.values);
       axios.post('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/group/', {
        // method: 'POST',
         headers: {

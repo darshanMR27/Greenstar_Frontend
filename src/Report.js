@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, ButtonGroup, Container, Table, Input, Form, FormGroup, Label} from 'reactstrap';
+import { Button, Label} from 'reactstrap';
 import Select from 'react-select';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -13,6 +13,7 @@ class Report extends Component {
     loading:true,
     error:"",
     reportData: [],
+    performanceData: [],
     numberOfDays:"",
     selectedSchool:"", 
     selectedGrade:"", 
@@ -129,12 +130,14 @@ componentDidMount(){
 
   onSubmit = async () => {
     const selectedStudId = this.state.selectedStudent.id;
-    //alert(selectedStudId);
+    const selectedGroupId = this.state.selectedGroup.id;
+    const selectedGradeId = this.state.selectedGrade.id;
+    alert('0000 = '+selectedStudId + ", 111 = "+selectedGroupId +", 222 = "+selectedGradeId);
     const fromDate = new Intl.DateTimeFormat("fr-ca", {year: 'numeric', month: '2-digit',day: '2-digit'}).format(this.state.fromDate);
     const toDate = new Intl.DateTimeFormat('fr-ca', {month: '2-digit',year: 'numeric', day: '2-digit'}).format(this.state.toDate);
-    axios.get("http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/performance/student/"+selectedStudId+"?fromDate="+fromDate+"&toDate="+toDate)
-    .then(result => {
-      console.log(result);
+    //if(selectedStudId !== null || selectedStudId !== 'undefined'){
+      axios.get("http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/reports/group/"+selectedGroupId+"?fromDate="+fromDate+"&toDate="+toDate).then(result => {
+      console.log('Darshan = '+result);
       this.setState({
           reportData: result.data,
           loading:false,
@@ -146,8 +149,9 @@ componentDidMount(){
         error:`${error}`,
         loading:false
       });
-    });  
-    this.setState({showForm: true});
+    });
+  //}
+  this.setState({showForm: true});
   }
 
   onChange = (e) => {
@@ -162,7 +166,7 @@ componentDidMount(){
     render() {
       const {error, reportData, selectedSchool, selectedGrade, 
         selectedSec,selectedGroup,selectedStudent, 
-        schools,grades,sections, groups, students,fromDate, toDate } = this.state;
+        schools,grades,sections, groups, students,fromDate, toDate, performanceData } = this.state;
       const showHide = {
         'display': this.state.showForm ? 'block' : 'none'
       };
@@ -173,6 +177,28 @@ componentDidMount(){
                 <Button color="primary" onClick={() => this.viewGroups()}  tag={Link} to="/dashboard">Try Again</Button>
               </p>
           );
+      }
+
+      //const thc = [];
+
+      var thc = [];
+      var finalcolumns=[];
+      var columns=[];
+      console.log('Report Length = '+reportData.length);
+      
+      for(var i=0;i<reportData.length;i++){
+        console.log('Performance Length = '+reportData[i].performanceData.length);
+        var l=Object.keys(reportData[i].performanceData).length;
+        console.log('Length = '+l);
+        for(var j=0;j<l;j++){
+          console.log('attendance = '+reportData[i].performanceData[j]);
+          thc.push(
+            <TableHeaderColumn  row='0' colSpan='3' headerAlign='center' dataField={reportData[0].performanceData[j].date} >{reportData[0].performanceData[j].date}</TableHeaderColumn>,
+            <TableHeaderColumn row='1' dataField='performanceData' key={j}>Attendance</TableHeaderColumn>,
+            <TableHeaderColumn row='1' dataField="discipline" key={j}>Discipline</TableHeaderColumn>,
+            <TableHeaderColumn row='1' dataField="homeWork" key={j}>Home Work</TableHeaderColumn>,
+          );
+        }
       }
         return (
           <div className="app">
@@ -211,13 +237,13 @@ componentDidMount(){
               </tr>
             
             <div className="report">
-            {<BootstrapTable data={ schools }>
-                    <TableHeaderColumn row='0' rowSpan='2' dataField='id' isKey>ID</TableHeaderColumn>
-                    <TableHeaderColumn row='0' colSpan='2' dataField="label">School Name</TableHeaderColumn>
-                    <TableHeaderColumn row='1'  dataField='address'>Address</TableHeaderColumn>
-                    <TableHeaderColumn row='1' dataField='city'>City</TableHeaderColumn>
-                    <TableHeaderColumn row='1' dataField='pincode'>Pin Code</TableHeaderColumn>
-                    <TableHeaderColumn row='1' dataField='maxClassGrade'>Max Grade</TableHeaderColumn>
+            {<BootstrapTable data={ reportData }>
+                    <TableHeaderColumn row='0' rowSpan='2' dataField='rollNum' isKey>Roll No</TableHeaderColumn>
+                    <TableHeaderColumn row='0' rowSpan='2' dataField="studentName">Student Name</TableHeaderColumn>
+                    <TableHeaderColumn row='0' rowSpan='2'  dataField='caste'>Caste</TableHeaderColumn>
+                    {
+                        thc
+                    }
             </BootstrapTable> }
             </div>
           </div>
