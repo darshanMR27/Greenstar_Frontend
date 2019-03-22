@@ -184,27 +184,34 @@ componentDidMount(){
       var thc = [];
       var finalcolumns=[];
       var columns=[];
+      var dateLoaded = false;
       console.log('Report Length = '+reportData.length);
       
       for(var i=0;i<reportData.length;i++){
+       
         console.log('Performance Length = '+reportData[i].performanceData.length);
         var l=Object.keys(reportData[i].performanceData).length;
+        var data = reportData[i];
         console.log('Length = '+l);
         for(var j=0;j<l;j++){
-          
-          console.log('attendance = '+reportData[i].performanceData[j]);
-          if(dateLoaded){
+          console.log('attendance = '+reportData[i].performanceData[j] + ', dateLoaded = ' +dateLoaded);
+          if(!dateLoaded){
+            console.log('inside dateLoaded');
+            
             thc.push(
               <TableHeaderColumn  row='0' colSpan='3' headerAlign='center' dataField={reportData[i].performanceData[j].date} >{reportData[i].performanceData[j].date}</TableHeaderColumn>,
             );
-          }
-          thc.push(
-            <TableHeaderColumn row='1' dataField='performanceData' key={j}>Attendance</TableHeaderColumn>,
-            <TableHeaderColumn row='1' dataField="discipline" key={j}>Discipline</TableHeaderColumn>,
-            <TableHeaderColumn row='1' dataField="homeWork" key={j}>Home Work</TableHeaderColumn>,
-          );
-          var dateLoaded = true;        }
-      }
+          } else {
+              thc.push(
+                <TableHeaderColumn row='1' dataField='attendance'>Attendance</TableHeaderColumn>,
+                <TableHeaderColumn row='1' dataField="discipline">Discipline</TableHeaderColumn>,
+                <TableHeaderColumn row='1' dataField="homeWork">Home Work</TableHeaderColumn>,
+              );
+             
+            }      
+         }
+         dateLoaded = true;
+        }
         return (
           <div className="app">
             <tr className="row">
@@ -242,7 +249,7 @@ componentDidMount(){
               </tr>
             
             <div className="report">
-            {<BootstrapTable data={ reportData }>
+            {<BootstrapTable data={ reportData } >
                     <TableHeaderColumn row='0' rowSpan='2' dataField='rollNum' isKey>Roll No</TableHeaderColumn>
                     <TableHeaderColumn row='0' rowSpan='2' dataField="studentName">Student Name</TableHeaderColumn>
                     <TableHeaderColumn row='0' rowSpan='2'  dataField='caste'>Caste</TableHeaderColumn>
