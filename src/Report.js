@@ -191,14 +191,19 @@ componentDidMount(){
         var l=Object.keys(reportData[i].performanceData).length;
         console.log('Length = '+l);
         for(var j=0;j<l;j++){
+          
           console.log('attendance = '+reportData[i].performanceData[j]);
+          if(dateLoaded){
+            thc.push(
+              <TableHeaderColumn  row='0' colSpan='3' headerAlign='center' dataField={reportData[i].performanceData[j].date} >{reportData[i].performanceData[j].date}</TableHeaderColumn>,
+            );
+          }
           thc.push(
-            <TableHeaderColumn  row='0' colSpan='3' headerAlign='center' dataField={reportData[0].performanceData[j].date} >{reportData[0].performanceData[j].date}</TableHeaderColumn>,
             <TableHeaderColumn row='1' dataField='performanceData' key={j}>Attendance</TableHeaderColumn>,
             <TableHeaderColumn row='1' dataField="discipline" key={j}>Discipline</TableHeaderColumn>,
             <TableHeaderColumn row='1' dataField="homeWork" key={j}>Home Work</TableHeaderColumn>,
           );
-        }
+          var dateLoaded = true;        }
       }
         return (
           <div className="app">
