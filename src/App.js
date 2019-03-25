@@ -4,9 +4,13 @@ import {
   BrowserRouter as Router
 } from "react-router-dom";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
+import Slider from 'react-animated-slider';
+import 'react-animated-slider/build/horizontal.css';
+import './cssstyles/slider-animations.css';
 import Dashboard from "./Dashboard";
 import Report from "./Report";
 import headerLogo from './images/logo.jpg';
+//import outreach1 from './images/outreach-1.jpg';
 import GroupList from "./explore/GroupList";
 import Login from "./Login";
 import About from "./About";
@@ -28,6 +32,38 @@ import "./cssstyles/Common.css";
 import "./cssstyles/index.css";
 class App extends Component {
   render (){
+    const content = [
+      {
+        title: 'Green Star Application',
+        description:
+        ' The Green Start Application helps to address three major problems of school: Attendance, Homework and Discipline'
+       /* button: 'Read More',
+        user: 'Outreach'*/
+      },
+      {
+        title: 'Attendance',
+        description:
+        'Schools have poor attendance and no strict attendance tracking mechanisms, resulting in higher dropout rates.'
+        /*button: 'Read More',
+        user: 'Outreach'*/
+      },
+      {
+        title: 'Home Work',
+        description:
+        'Majority of students in govt. schools do not have a formal homework structure which discourages them to learn at home.'
+        /*button: 'Read More',
+        user: 'Outreach'
+        */
+      },
+      {
+        title: 'Discipline',
+        description:
+        'No focus provided on behavioral changes as most of the items are provided by the govt. ' +
+        'These problems are transferred into measurable parameters and stars are awarded.'
+        /*button: 'Read More',
+        user: 'Outreach'*/
+      }
+    ];
     return (
       <Router>
           <div>
@@ -52,6 +88,18 @@ class App extends Component {
               </Navbar.Collapse>
             </Navbar>
             <div className="dashboard">
+                <Slider autoplay="3000ms" className="slider">
+                {content.map((item, index) => (
+                    <div
+                      key={index}>
+                      <div>
+                        <h3>{item.title}</h3>
+                        <p>{item.description}</p>
+                        
+                      </div>
+                    </div>
+                  ))} 
+                </Slider>
               <Route exact path="/login" component={Login}/>
               <Route path="/dashboard" component={Dashboard}/>
               <Route path="/report" component={Report}/>
@@ -72,6 +120,7 @@ class App extends Component {
               <Route path='/roles' component={RoleList}/>
               <Route path='/roles/:id' component={RoleEdit}/>
             </div>
+            <div>
             <Navbar expand="lg" bg="dark" variant="dark">
               <Navbar.Brand style={{display: 'flex'}} className="footer-span"> @Copyright; version:1.0</Navbar.Brand>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -82,6 +131,7 @@ class App extends Component {
                 </Nav>
               </Navbar.Collapse>
             </Navbar>
+            </div>
           </div>
       </Router>
     );

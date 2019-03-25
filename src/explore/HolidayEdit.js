@@ -61,7 +61,7 @@ class HolidayEdit extends Component {
 
   async holidaySubmit(event) {
     event.preventDefault();
-    const {holidayDate, holidayDesc} = this.state;
+    const {holidayDate, holidayDesc} = this.state;  
     const selId = this.props.match.params.id;
     if (selId !== 'new') {  
       return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/holiday/update', {
@@ -77,7 +77,7 @@ class HolidayEdit extends Component {
           publicHoliday: this.state.isPublic
         })
       }).then(response => {
-        this.setState({showUpdateSchool: true});
+        this.setState({showUpdateForm: true});
       }).catch(error => {
         this.setState({showErrorForm: true});
         console.error("error", error);
@@ -86,6 +86,7 @@ class HolidayEdit extends Component {
         });
       });
     } else {
+      const formattedDate = new Intl.DateTimeFormat("fr-ca", {year: 'numeric', month: '2-digit',day: '2-digit'}).format(holidayDate);
       return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/holiday/new', {
         method: 'POST',
         headers: {
@@ -93,7 +94,7 @@ class HolidayEdit extends Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          date: holidayDate,
+          date: formattedDate,
           details: holidayDesc,
           publicHoliday: this.state.isPublic
         })
@@ -110,7 +111,16 @@ class HolidayEdit extends Component {
   }
 
   render() {
-    const {item,  holidayDate, holidayDesc} = this.state;
+    const {item,  holidayDate, holidayDesc, error} = this.state;
+    const showAddSchool = {
+      'display': this.state.showAddForm ? 'block' : 'none'
+    };
+    const showErrorSchool = {
+      'display': this.state.showErrorForm ? 'block' : 'none'
+    };
+    const showUpdateSchool = {
+      'display': this.state.showUpdateForm ? 'block' : 'none'
+    };
     const title = <h2>{item.id ? 'Edit Holiday' : 'Add Holiday'}</h2>;
     return <div className="app">
       <Container>
@@ -126,13 +136,26 @@ class HolidayEdit extends Component {
                     <Input type="text" ref="holidayDesc" name="holidayDesc" id="holidayDesc" placeholder="Enter Holiday Description" onChange={e => this.onChange(e)}  value={holidayDesc}/>
                 </FormGroup>
             </div>
-            <FormGroup className="col-md-3 mb-3">
-                  <Label>Is Public holiday: <Input type="checkbox" checked={this.state.isChecked} onChange={this.toggleChange} /></Label>
-            </FormGroup>
-            <FormGroup>   
-              <Button color="primary" type="submit">Save</Button>{' '}
-              <Button color="success" tag={Link} to="/holidays">Cancel</Button>
-            </FormGroup>
+            <div>
+              <FormGroup className="col-md-3 mb-3">
+                    <Label>Is Public holiday: <Input type="checkbox" checked={this.state.isPublic} onChange={this.toggleChange} /></Label>
+              </FormGroup>
+            </div>
+            <div>
+              <FormGroup>   
+                <Button color="primary" type="submit">Save</Button>{' '}
+                <Button color="success" tag={Link} to="/holidays">Cancel</Button>
+              </FormGroup>
+            </div>
+            <div style={showAddSchool}>
+              <p style={{color: 'darkgreen'}}>Holiday Date Added successfully</p>
+            </div>
+            <div style={showErrorSchool}>
+                <p style={{color: 'red'}}>{error} while adding / updating holiday</p>
+            </div>
+            <div style={showUpdateSchool}>
+                <p style={{color: 'blue'}}>Holiday Date Updated successfully</p>
+            </div>
         </Form>
       </Container>
     </div>

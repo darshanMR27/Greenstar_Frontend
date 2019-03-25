@@ -134,4 +134,28 @@ text-transform: uppercase;
     font-family: sans-serif;
     transform: translate(0.5em, -0.5em);
     width:7em;
-  }
+}
+.slider {
+  height:4em
+}
+.slider a.previousButton, .slider a.nextButton {
+  font-size: 22px;
+    line-height: 0;
+    display: none;
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    transition: all .3s linear;
+    z-index: 1;
+    color: #333;
+    padding: 10px;
+    text-decoration: none;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden /* prevent jump effect when scaling */;
+}
+.form-check-input {
+  position: relative;
+  margin-top: 0;
+  margin-left: 0;
+}

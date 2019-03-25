@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { Link} from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "@kenshooui/react-multi-select/dist/style.css"
-import axios from 'axios';
-import { generateKeyPair } from 'crypto';
+import "@kenshooui/react-multi-select/dist/style.css";
 class SchoolEdit extends Component {
   state = {
     schoolName:'',
@@ -72,7 +70,7 @@ class SchoolEdit extends Component {
           pincode: pinCode
         })
       }).then(response => {
-        this.setState({showUpdateSchool: true});
+        this.setState({showUpdateForm: true});
       }).catch(error => {
         this.setState({showErrorForm: true});
         console.error("error", error);
@@ -157,7 +155,7 @@ class SchoolEdit extends Component {
               <p style={{color: 'red'}}>{error} while adding / updating school</p>
           </div>
           <div style={showUpdateSchool}>
-              <p style={{color: 'darkblue'}}>{schoolName} School Uodated successfully</p>
+              <p style={{color: 'blue'}}>{schoolName} School Updated successfully</p>
           </div>
         </Form>
       </Container>

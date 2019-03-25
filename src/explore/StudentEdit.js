@@ -23,7 +23,8 @@ class StudentEdit extends Component {
       schoolName:"",
       gradeName:"",
       sectionName:"",
-      groupName:""
+      groupName:"",
+      gender:""
   };
 
   state = {
@@ -35,7 +36,8 @@ class StudentEdit extends Component {
     schoolName:null,
     gradeName:null,
     sectionName:null,
-    groupName:null
+    groupName:null,
+    gender:null
   }
 
   constructor(props) {
@@ -49,14 +51,15 @@ class StudentEdit extends Component {
       schoolName:null,
       gradeName:null,
       sectionName:null,
-      groupName:null
+      groupName:null,
+      gender:null
     };
     this.handleSchoolChange = this.handleSchoolChange.bind(this);
     this.handleClassChange = this.handleClassChange.bind(this);
     this.handleSectionChange = this.handleSectionChange.bind(this);
     this.handleGroupChange = this.handleGroupChange.bind(this);
     this.handleJoinDateChange = this.handleJoinDateChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.studentSubmit = this.studentSubmit.bind(this);
   }
 
   async componentDidMount() {
@@ -171,27 +174,87 @@ class StudentEdit extends Component {
     });
   }
 
-  async handleSubmit(event) {
-    //event.preventDefault();
-    const {item, selectedGroup, selectedSchool, selectedGrade, 
-      selectedSection, studentName, rollNumber, caste, religion,
-      joiningDate, address, pincode, city} = this.state;
-    //alert(selectedItems.length);   
-  //   alert('School = '+selectedSchool.label);
-  //  alert('Grade = '+selectedGrade.label);
-  //   alert('Section = '+selectedSection.label);
-  //   alert('Group = '+groupName);
-    
-  alert(this.state.joiningDate);
-    await fetch('/api/student', {
-      method: (item.id) ? 'PUT' : 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(item),
+  setGender(event) {
+    this.setState({
+      gender: event.target.value
     });
-    this.props.history.push('/students');
+    //console.log(event.target.value);
+  }
+
+  async studentSubmit(event) {
+    event.preventDefault();
+    const {studentName, rollNumber, caste, religion,
+      joiningDate, address, pincode, city, gender} = this.state;
+    let selId = this.props.match.params.id;
+    let schoolId = this.state.selectedSchool.id;
+    let gradeId = this.state.selectedGrade.id;
+    let sectionId = this.state.selectedSec.id;
+    let groupId = this.state.selectedGroup.id;
+    if (selId !== 'new') {
+      return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/student', {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: selId,
+          rollNumber:rollNumber,
+          name: studentName,
+          caste: caste,
+          religion: religion,
+          gender: gender,
+          joiningDate: joiningDate,
+          schoolId: schoolId,
+          clsId: gradeId,
+          sectionId: sectionId,
+          groupId: groupId,
+          city:city,
+          pincode: pincode,
+          address:address
+        })
+      }).then(response => {
+        this.setState({showUpdateSchool: true});
+      }).catch(error => {
+        this.setState({showErrorForm: true});
+        console.error("error", error);
+        this.setState({
+          error:`${error}`
+        });
+      });
+    } else {
+      let formattedJoinDate = new Intl.DateTimeFormat("fr-ca", {year: 'numeric', month: '2-digit',day: '2-digit'}).format(joiningDate);
+      return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/student', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          rollNumber:rollNumber,
+          name: studentName,
+          caste: caste,
+          religion: religion,
+          gender: gender,
+          joiningDate: formattedJoinDate,
+          schoolId: schoolId,
+          clsId: gradeId,
+          sectionId: sectionId,
+          groupId: groupId,
+          city:city,
+          pincode: pincode,
+          address:address
+        })
+      }).then(response => {
+        this.setState({showAddForm: true});
+      }).catch(error => {
+        this.setState({showErrorForm: true});
+        console.error("error", error);
+        this.setState({
+          error:`${error}`
+        });
+      });
+    }
   }
 
   render() {
@@ -199,13 +262,13 @@ class StudentEdit extends Component {
       selectedSection, schools, 
       grades, sections, students, groups, studentName, 
       rollNumber, caste, religion, joiningDate, address, pinCode,city,
-    schoolName, sectionName, gradeName, groupName} = this.state;
+    schoolName, sectionName, gradeName, groupName, gender} = this.state;
     //const title = <h2>{item.id ? 'Edit Student' : 'Add Student'}</h2>;
     if (this.props.match.params.id !== 'new') {
         return <div className="app">
         <Container>
         <h2>Edit Student</h2>
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.studentSubmit}>
           <div className="row">
           <FormGroup className="col-md-3 mb-3">
             <Label for="schoolName">School Name</Label>
@@ -255,6 +318,11 @@ class StudentEdit extends Component {
               <Label for="joiningDate">Joining Date</Label>
               <DatePicker selected={this.state.joiningDate} className="datePicker" placeholderText="Select Date" onChange={this.handleJoinDateChange} dateFormat="dd/MM/yyyy"/>
             </FormGroup>
+            <FormGroup className="col-md-3 mb-3" onChange={this.setGender.bind(this)}>
+              <Label for="gender">Gender</Label>
+              <Input type="radio" value="MALE" name="gender" defaultChecked={gender === "MALE"}/> Male
+              <Input type="radio" value="FEMALE" name="gender" defaultChecked={gender === "FEMALE"}/> Female
+            </FormGroup>
             </div>
           <FormGroup>   
             <Button color="primary" type="submit">Save</Button>{' '}
@@ -267,7 +335,7 @@ class StudentEdit extends Component {
         return <div className="app">
         <Container>
         <h2>Add Student</h2>
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.studentSubmit}>
           <div className="row">
           <FormGroup className="col-md-3 mb-3">
             <Label for="name">School Name</Label>
@@ -318,6 +386,11 @@ class StudentEdit extends Component {
             <FormGroup className="col-md-3 mb-3 monthPickerClass">
               <Label for="joiningDate">Joining Date</Label>
               <DatePicker selected={this.state.joiningDate} className="datePicker" placeholderText="Select Date" onChange={this.handleJoinDateChange} dateFormat="dd/MM/yyyy"/>
+            </FormGroup>
+            <FormGroup className="col-md-3 mb-3" style={{display:'inline-block'}} onChange={this.setGender.bind(this)}>
+              <Label for="gender">Gender</Label><br></br>
+              <Input type="radio" value="MALE" name="gender"/> Male &nbsp;&nbsp;
+              <Input type="radio" value="FEMALE" name="gender"/> Female
             </FormGroup>
             </div>
           <FormGroup>   

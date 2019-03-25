@@ -55,15 +55,15 @@ componentDidMount(){
   }
 
   async remove(id) {
-    await fetch(`/api/school/${id}`, {
+    await fetch(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/school/${id}`, {
       method: 'DELETE',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       }
     }).then(() => {
-      let updatedGroups = [...this.state.schools].filter(i => i.id !== id);
-      this.setState({schools: updatedGroups});
+      let updatedSchools = [...this.state.schools].filter(i => i.id !== id);
+      this.setState({schools: updatedSchools});
     });
   }
 
@@ -122,7 +122,7 @@ componentDidMount(){
                 ))}
                   </tbody>
                 </Table>
-                </div>
+            </div>
       </div>
     );
   }
