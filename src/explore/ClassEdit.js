@@ -29,10 +29,12 @@ class ClassEdit extends Component {
       grades : [],
       selectedItems: [],
       gradeName:"",
-      schoolName:""
+      schoolName:"",
+      schoolId:"",
+      gradeId:""
     };
     this.handleSchoolChange = this.handleSchoolChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.classSubmit = this.classSubmit.bind(this);
   }
 
   async componentDidMount() {
@@ -43,7 +45,9 @@ class ClassEdit extends Component {
        this.setState(
          {item: grade,
            gradeName:grade.label,
-           schoolName:grade.schoolId
+           schoolName:grade.schoolName,
+           schoolId: grade.schoolId,
+           gradeId: grade.id
          });
      } else {
        return axios.get(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/school/`)
@@ -69,35 +73,76 @@ class ClassEdit extends Component {
     });
   }
 
-  async handleSubmit(event) {
-    //event.preventDefault();
-    const {item, selectedSchool, selectedGrade} = this.state;
-    //alert(selectedItems.length);   
-  //   alert('School = '+selectedSchool.label);
-  //  alert('Grade = '+selectedGrade.label);
-  //   alert('Section = '+selectedSection.label);
-  //   alert('Group = '+groupName);
-    alert(item.id);
-    await fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080//api/v1/class', {
-      method: (item.id) ? 'PUT' : 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(item),
-    });
-    this.props.history.push('/grades');
+  async classSubmit(event) {
+    event.preventDefault();
+    const {gradeName, selectedSchool, schoolName, schoolId, gradeId } = this.state;
+    const selId = this.props.match.params.id;
+    alert('selId = '+selId+', gradeId = '+gradeId+', schoolId ='+schoolId);
+    if (selId !== 'new') {  
+      alert('Inside not New');
+      return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/class', {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: selId,
+          grade: gradeId,
+          schoolId: schoolId
+        })
+      }).then(response => {
+        this.setState({showUpdateSchool: true});
+      }).catch(error => {
+        this.setState({showErrorForm: true});
+        console.error("error", error);
+        this.setState({
+          error:`${error}`
+        });
+      });
+    } else {
+      alert('Inside New');
+      const schoolId = selectedSchool.id;
+      return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/class', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          grade: gradeName,
+          schoolId: schoolId
+        })
+      }).then(response => {
+        this.setState({showAddForm: true});
+      }).catch(error => {
+        this.setState({showErrorForm: true});
+        console.error("error", error);
+        this.setState({
+          error:`${error}`
+        });
+      });
+    }
   }
 
   render() {
     const {item, selectedSchool, gradeName,  schools, 
-      grades, schoolName} = this.state;
+      grades, schoolName, error} = this.state;
+      const showAddClass = {
+        'display': this.state.showAddForm ? 'block' : 'none'
+      };
+      const showErrorClass = {
+        'display': this.state.showErrorForm ? 'block' : 'none'
+      };
+      const showUpdateClass = {
+        'display': this.state.showUpdateForm ? 'block' : 'none'
+      };
     //const title = <h2>{item.id ? 'Edit Class' : 'Add Class'}</h2>;
     if (this.props.match.params.id !== 'new') {
         return <div className="app">
         <Container>
             <h2>Edit Class</h2>
-            <Form onSubmit={this.handleSubmit}>
+            <Form onSubmit={this.classSubmit}>
                 <div className="row">
                     <FormGroup className="col-md-3 mb-3">
                         <Label for="name">School Name</Label>
@@ -114,12 +159,18 @@ class ClassEdit extends Component {
                     </FormGroup>
                 </Form>
             </Container>
+            <div style={showUpdateClass}>
+                <p style={{color: 'darkblue'}}>{schoolName} Class Uodated successfully</p>
+            </div>
+            <div style={showErrorClass}>
+                <p style={{color: 'red'}}>{error} while adding / updating class</p>
+            </div>
         </div>
     } else {
         return <div className="app">
         <Container>
             <h2>Add Class</h2>
-            <Form onSubmit={this.handleSubmit}>
+            <Form onSubmit={this.classSubmit}>
                 <div className="row">
                     <FormGroup className="col-md-3 mb-3">
                         <Label for="name">School Name</Label>
@@ -136,6 +187,12 @@ class ClassEdit extends Component {
                     </FormGroup>
                 </Form>
             </Container>
+            <div style={showAddClass}>
+                <p style={{color: 'darkgreen'}}>{gradeName} Class Added successfully</p>
+            </div>
+            <div style={showErrorClass}>
+                <p style={{color: 'red'}}>{error} while adding / updating class</p>
+            </div>
         </div>
         }
     }

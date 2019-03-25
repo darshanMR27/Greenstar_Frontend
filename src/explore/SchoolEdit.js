@@ -4,6 +4,7 @@ import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@kenshooui/react-multi-select/dist/style.css"
 import axios from 'axios';
+import { generateKeyPair } from 'crypto';
 class SchoolEdit extends Component {
   state = {
     schoolName:'',
@@ -28,6 +29,9 @@ class SchoolEdit extends Component {
   }
 
   async componentDidMount() {
+    this.setState({showUpdateSchool: false});
+    this.setState({showAddSchool: false});
+    this.setState({showErrorSchool: false});
     if (this.props.match.params.id !== 'new') {
       const school = await (await fetch(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/school/${this.props.match.params.id}`)).json();
       console.log(school);
@@ -49,35 +53,70 @@ class SchoolEdit extends Component {
   }
 
   async schoolSubmit(event) {
-    if (this.props.match.params.id !== 'new') {  
-      axios.put('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/school', {
-        //method:'PUT',
+    event.preventDefault();
+    const {schoolName, maxClassGrade, address, pinCode, city} = this.state;
+    const selId = this.props.match.params.id;
+    if (selId !== 'new') {  
+      return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/school', {
+        method: 'PUT',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(),
+        body: JSON.stringify({
+          id: selId,
+          address: address,
+          city: city,
+          maxClassGrade: maxClassGrade,
+          label: schoolName,
+          pincode: pinCode
+        })
+      }).then(response => {
+        this.setState({showUpdateSchool: true});
+      }).catch(error => {
+        this.setState({showErrorForm: true});
+        console.error("error", error);
+        this.setState({
+          error:`${error}`
+        });
       });
     } else {
-      const {schoolName, maxClassGrade, address, pinCode, city } = this.state;      
-      axios.post('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/school', {
+      return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/school', {
+        method: 'POST',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           address: address,
           city: city,
           maxClassGrade: maxClassGrade,
-          schoolName: schoolName,
-          pinCode: pinCode
+          label: schoolName,
+          pincode: pinCode
         })
+      }).then(response => {
+        this.setState({showAddForm: true});
+      }).catch(error => {
+        this.setState({showErrorForm: true});
+        console.error("error", error);
+        this.setState({
+          error:`${error}`
+        });
       });
     }
   }
 
   render() {
-    const {item, schoolName, maxClassGrade, address, pinCode, city} = this.state;
+    const {item, error, schoolName, maxClassGrade, address, pinCode, city} = this.state;
+    const showAddSchool = {
+      'display': this.state.showAddForm ? 'block' : 'none'
+    };
+    const showErrorSchool = {
+      'display': this.state.showErrorForm ? 'block' : 'none'
+    };
+    const showUpdateSchool = {
+      'display': this.state.showUpdateForm ? 'block' : 'none'
+    };
     const title = <h2>{item.id ? 'Edit School' : 'Add School'}</h2>;
     return <div className="app">
       <Container>
@@ -105,10 +144,21 @@ class SchoolEdit extends Component {
               <Input type="text" ref="city" name="city" id="city" placeholder="Enter City" onChange={e => this.onChange(e)}  value={city}/>
             </FormGroup>
             </div>
+            <div>
           <FormGroup>   
             <Button color="primary" type="submit">Save</Button>{' '}
             <Button color="success" tag={Link} to="/schools">Cancel</Button>
           </FormGroup>
+          </div>
+          <div style={showAddSchool}>
+              <p style={{color: 'darkgreen'}}>{schoolName} School Added successfully</p>
+          </div>
+          <div style={showErrorSchool}>
+              <p style={{color: 'red'}}>{error} while adding / updating school</p>
+          </div>
+          <div style={showUpdateSchool}>
+              <p style={{color: 'darkblue'}}>{schoolName} School Uodated successfully</p>
+          </div>
         </Form>
       </Container>
     </div>

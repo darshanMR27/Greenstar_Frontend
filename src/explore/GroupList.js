@@ -143,49 +143,51 @@ class GroupList extends Component {
               </Form>
           </Container>
         </div>
-          <div style={showHide}>
-                    <h2>List Group</h2>
-                        <tr className="row">
-                          <td className="col-md-3 mb-3">
-                              <Label for="name">School Name</Label>
-                              <Select options={schools} name="school" id="school" onChange={this.handleSchoolChange} value={selectedSchool}/>
-                          </td>
-                          <td className="col-md-3 mb-3">
-                              <Label for="grade">Class or Grade</Label>
-                              <Select options={ grades } name="grade" id="grade" onChange={this.handleClassChange} value={selectedGrade}/>
-                          </td>
-                            <td className="col-md-3 mb-3">
-                              <Label for="section">Section</Label>
-                              <Select options={ sections } name="section" id="section" onChange={this.handleSectionChange} value={selectedSection}/>
-                          </td>
-                        </tr>                        
-                <Table className="mt-4" style={{background: 'lightgray'}}>
-                  <thead>
-                    <tr>
-                      <th width="10%">Name</th>
-                      <th width="10%">Section Name</th>
-                      <th width="10%">Size</th>
-                      <th width="10%">Student IDs</th>
-                      <th width="20%">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  {data.map(group => (
-                    <tr key={group.id}>
-                      <td style={{whiteSpace: 'nowrap'}}>{group.label}</td>
-                      <td>{group.sectionName}</td>
-                      <td>{group.size}</td>
-                      <td>{group.studentNames}</td>
-                      <td>
-                        <ButtonGroup>
-                          <Button size="sm" color="primary" onClick={() => this.hideHeader()} tag={Link} to={"/groups/"+ group.id}>Edit</Button>
-                          <Button size="sm" color="danger" onClick={() => this.remove(group.id)}>Delete</Button>
-                        </ButtonGroup>
-                      </td>
-                    </tr> ))}
-                  </tbody>
-                </Table>
-                </div>
+        <div style={showHide}>
+            <h2>List Group</h2>
+            <tr className="row">
+              <td className="col-md-3 mb-3">
+                  <Label for="name">School Name</Label>
+                  <Select options={schools} name="school" id="school" onChange={this.handleSchoolChange} value={selectedSchool}/>
+              </td>
+              <td className="col-md-3 mb-3">
+                  <Label for="grade">Class or Grade</Label>
+                  <Select options={ grades } name="grade" id="grade" onChange={this.handleClassChange} value={selectedGrade}/>
+              </td>
+                <td className="col-md-3 mb-3">
+                  <Label for="section">Section</Label>
+                  <Select options={ sections } name="section" id="section" onChange={this.handleSectionChange} value={selectedSection}/>
+              </td>
+            </tr>                        
+            <Table className="mt-4" style={{background: 'lightgray'}}>
+              <thead>
+                <tr>
+                  <th width="10%">Name</th>
+                  <th width="10%">School Name</th>
+                  <th width="10%">Class Name</th>
+                  <th width="10%">Section Name</th>
+                  <th width="10%">Student Name(s)</th>
+                  <th width="20%">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+              {data.map(group => (
+                <tr key={group.id}>
+                  <td style={{whiteSpace: 'nowrap'}}>{group.label}</td>
+                  <td>{group.schoolName}</td>
+                  <td>{group.className}</td>
+                  <td>{group.sectionName}</td>
+                  <td style={{whiteSpace:'nowrap'}}>{group.studentNames}</td>
+                  <td>
+                    <ButtonGroup>
+                      <Button size="sm" color="primary" onClick={() => this.hideHeader()} tag={Link} to={"/groups/"+ group.id}>Edit</Button>
+                      <Button size="sm" color="danger" onClick={() => this.remove(group.id)}>Delete</Button>
+                    </ButtonGroup>
+                  </td>
+                </tr> ))}
+              </tbody>
+            </Table>
+          </div>
       </div>
     );
   }

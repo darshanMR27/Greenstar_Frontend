@@ -93,7 +93,7 @@ componentDidMount(){
         </div>
             <div style={showHide}>
                 <h2>List School</h2>
-                <Table className="mt-4" style={{background: 'lightgray'}}>
+                <Table className="mt-4 sortable" style={{background: 'lightgray'}}>
                   <thead>
                     <tr>
                       <th width="20%">Name</th>

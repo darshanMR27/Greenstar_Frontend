@@ -109,8 +109,8 @@ componentDidMount(){
                   <tbody>
                   {grades.map(grade => (
                     <tr key={grade.id}>
-                        <td style={{whiteSpace: 'nowrap'}}>{grade.school}</td>
-                        <td>{grade.class}</td>
+                        <td style={{whiteSpace: 'nowrap'}}>{grade.schoolName}</td>
+                        <td>{grade.label}</td>
                         <td>
                         <ButtonGroup>
                             <Button size="sm"  color="primary" onClick={() => this.hideHeader()}  tag={Link} to={"/grades/" + grade.id}>Edit</Button>
