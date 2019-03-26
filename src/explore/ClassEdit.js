@@ -38,13 +38,12 @@ class ClassEdit extends Component {
   }
 
   async componentDidMount() {
-    // alert('GroupID = '+this.props.match.params.id);
      if (this.props.match.params.id !== 'new') {
        const grade = await (await fetch(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/class/${this.props.match.params.id}`)).json();
        console.log(grade);
        this.setState(
          {item: grade,
-           gradeName:grade.label,
+           gradeName:grade.grade,
            schoolName:grade.schoolName,
            schoolId: grade.schoolId,
            gradeId: grade.id
@@ -68,18 +67,18 @@ class ClassEdit extends Component {
     this.setState({ selectedSchool });
   }
   onChange = (e) => {
-    this.setState({
-        [e.target.name]: e.target.value,
-    });
+    const re = /^[0-9\b]+$/;
+      if (e.target.value === '' || re.test(e.target.value)) {
+         this.setState({gradeName: e.target.value})
+      }
   }
 
   async classSubmit(event) {
     event.preventDefault();
-    const {gradeName, selectedSchool, schoolName, schoolId, gradeId } = this.state;
-    const selId = this.props.match.params.id;
-    alert('selId = '+selId+', gradeId = '+gradeId+', schoolId ='+schoolId);
+    const {gradeName, selectedSchool, schoolId } = this.state;
+    let selId = this.props.match.params.id;
+    //alert('selId = '+selId+', gradeId = '+gradeId+', schoolId ='+schoolId);
     if (selId !== 'new') {  
-      alert('Inside not New');
       return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/class', {
         method: 'PUT',
         headers: {
@@ -88,11 +87,11 @@ class ClassEdit extends Component {
         },
         body: JSON.stringify({
           id: selId,
-          grade: gradeId,
+          grade: gradeName,
           schoolId: schoolId
         })
       }).then(response => {
-        this.setState({showUpdateSchool: true});
+        this.setState({showUpdateForm: true});
       }).catch(error => {
         this.setState({showErrorForm: true});
         console.error("error", error);
@@ -101,8 +100,7 @@ class ClassEdit extends Component {
         });
       });
     } else {
-      alert('Inside New');
-      const schoolId = selectedSchool.id;
+      let schoolId = selectedSchool.id;
       return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/class', {
         method: 'POST',
         headers: {
@@ -160,7 +158,7 @@ class ClassEdit extends Component {
                 </Form>
             </Container>
             <div style={showUpdateClass}>
-                <p style={{color: 'darkblue'}}>{schoolName} Class Uodated successfully</p>
+                <p style={{color: 'darkblue'}}>{gradeName} Class Updated successfully</p>
             </div>
             <div style={showErrorClass}>
                 <p style={{color: 'red'}}>{error} while adding / updating class</p>

@@ -39,19 +39,20 @@ class SectionEdit extends Component {
     };
     this.handleSchoolChange = this.handleSchoolChange.bind(this);
     this.handleClassChange = this.handleClassChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.sectionSubmit = this.sectionSubmit.bind(this);
   }
 
   async componentDidMount() {
     // alert('GroupID = '+this.props.match.params.id);
      if (this.props.match.params.id !== 'new') {
-       const section = await (await fetch(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/group/${this.props.match.params.id}`)).json();
+       const section = await (await fetch(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/section/${this.props.match.params.id}`)).json();
        console.log(section);
        this.setState(
          {item: section,
            sectionName:section.label,
-           schoolName: section.schoolId,
-           gradeName: section.classId
+           schoolName: section.schoolName,
+           gradeName: section.className,
+           grade: section.classId
          });
      } else {
        return axios.get(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/school/`)
@@ -85,7 +86,9 @@ class SectionEdit extends Component {
    }
    handleClassChange = (selectedGrade) => {
      const selectedGradeValue = selectedGrade.name;
+     const selGradeId = selectedGrade.id;
      this.setState({selectedGradeValue });
+     this.setState({selGradeId})
      return axios.get(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/section/class/`+selectedGrade.id)
        .then(result => {
          console.log(result);
@@ -111,37 +114,75 @@ class SectionEdit extends Component {
     });
   }
 
-  async handleSubmit(event) {
-    //event.preventDefault();
-    const {item, selectedSchool, selectedGrade, 
-      selectedSection} = this.state;
-    //alert(selectedItems.length);   
-  //   alert('School = '+selectedSchool.label);
-  //  alert('Grade = '+selectedGrade.label);
-  //   alert('Section = '+selectedSection.label);
-  //   alert('Group = '+groupName);
-    
-    await fetch('/api/section', {
-      method: (item.id) ? 'PUT' : 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(item),
-    });
-    this.props.history.push('/sections');
+  async sectionSubmit(event) {
+    event.preventDefault();
+    const {sectionName, grade} = this.state;
+    let selId = this.props.match.params.id;
+    let classId = this.state.selGradeId;
+    alert(grade);
+    alert(sectionName);
+    if (selId !== 'new') {
+      return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/section', {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: selId,
+          classId: grade,
+          label: sectionName
+        })
+      }).then(response => {
+        this.setState({showUpdateForm: true});
+      }).catch(error => {
+        this.setState({showErrorForm: true});
+        console.error("error", error);
+        this.setState({
+          error:`${error}`
+        });
+      });
+    } else {
+      return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/section', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          classId: classId,
+          label: sectionName
+        })
+      }).then(response => {
+        this.setState({showAddForm: true});
+      }).catch(error => {
+        this.setState({showErrorForm: true});
+        console.error("error", error);
+        this.setState({
+          error:`${error}`
+        });
+      });
+    }
   }
 
   render() {
-    const {item, selectedSchool, selectedGrade, 
-      selectedSection, schools, 
+    const {error, selectedSchool, selectedGrade, schools, 
       grades, sectionName, schoolName, gradeName} = this.state;
+      const showAddSection = {
+        'display': this.state.showAddForm ? 'block' : 'none'
+      };
+      const showErrorSection = {
+        'display': this.state.showErrorForm ? 'block' : 'none'
+      };
+      const showUpdateSection = {
+        'display': this.state.showUpdateForm ? 'block' : 'none'
+      }; 
     //const title = <h2>{item.id ? 'Edit Section' : 'Add Section'}</h2>;
     if (this.props.match.params.id !== 'new') {
         return <div className="app">
         <Container>
             <h2>Edit Section</h2>
-            <Form onSubmit={this.handleSubmit}>
+            <Form onSubmit={this.sectionSubmit}>
             <div className="row">
             <FormGroup className="col-md-3 mb-3">
                 <Label for="name">School Name</Label>
@@ -162,12 +203,15 @@ class SectionEdit extends Component {
             </FormGroup>
             </Form>
         </Container>
+        <div style={showUpdateSection}>
+              <p style={{color: 'blue'}}>{sectionName} section Updated successfully</p>
+          </div>
         </div>
     } else{
         return <div className="app">
         <Container>
             <h2>Add Section</h2>
-            <Form onSubmit={this.handleSubmit}>
+            <Form onSubmit={this.sectionSubmit}>
             <div className="row">
             <FormGroup className="col-md-3 mb-3">
                 <Label for="name">School Name</Label>
@@ -190,6 +234,12 @@ class SectionEdit extends Component {
             </FormGroup>
             </Form>
         </Container>
+          <div style={showAddSection}>
+              <p style={{color: 'darkgreen'}}>{sectionName} section Added successfully</p>
+          </div>
+          <div style={showErrorSection}>
+              <p style={{color: 'red'}}>{error} while adding / updating section</p>
+          </div>
         </div>
     }
   }

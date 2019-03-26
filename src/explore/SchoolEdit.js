@@ -22,6 +22,8 @@ class SchoolEdit extends Component {
       pinCode:'',
       city:''
     };
+    this.onPinCodeChange = this.onPinCodeChange.bind(this);
+    this.onMaxGradeChange = this.onMaxGradeChange.bind(this);
     this.onChange = this.onChange.bind(this);
     this.schoolSubmit = this.schoolSubmit.bind(this);
   }
@@ -42,6 +44,20 @@ class SchoolEdit extends Component {
           city:school.city
         });
     }
+  }
+
+  onMaxGradeChange = (e) => {
+    const re = /^[0-9\b]+$/;
+      if (e.target.value === '' || re.test(e.target.value)) {
+         this.setState({maxClassGrade: e.target.value})
+      }
+  }
+
+  onPinCodeChange = (e) => {
+    const re = /^[0-9\b]+$/;
+      if (e.target.value === '' || re.test(e.target.value)) {
+         this.setState({pinCode: e.target.value})
+      }
   }
 
   onChange = (e) => {
@@ -127,7 +143,7 @@ class SchoolEdit extends Component {
             </FormGroup>
             <FormGroup className="col-md-3 mb-3">
               <Label for="maxClassGrade">Max Grade of Class</Label>
-              <Input type="text" ref="maxClassGrade" name="maxClassGrade" id="maxClassGrade" placeholder="Enter Max Grade or Class" onChange={e => this.onChange(e)}  value={maxClassGrade}/>
+              <Input type="text" ref="maxClassGrade" name="maxClassGrade" id="maxClassGrade" placeholder="Enter Max Grade or Class" onChange={e => this.onMaxGradeChange(e)}  value={maxClassGrade}/>
             </FormGroup>
             <FormGroup className="col-md-3 mb-3">
               <Label for="address">Address</Label>
@@ -135,7 +151,7 @@ class SchoolEdit extends Component {
             </FormGroup>
             <FormGroup className="col-md-3 mb-3">
               <Label for="pinCode">Pin Code</Label>
-              <Input type="text" ref="pinCode" name="pinCode" id="pinCode" placeholder="Enter Pincode" onChange={e => this.onChange(e)}  value={pinCode}/>
+              <Input type="text" ref="pinCode" name="pinCode" id="pinCode" placeholder="Enter Pincode" onChange={e => this.onPinCodeChange(e)}  value={pinCode}/>
             </FormGroup>
             <FormGroup className="col-md-3 mb-3">
               <Label for="city">City</Label>

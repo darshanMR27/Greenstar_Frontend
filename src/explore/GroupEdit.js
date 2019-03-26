@@ -138,6 +138,17 @@ class GroupEdit extends Component {
   }
   handleEditMultiChange(selectedItems) {
     this.setState({ selectedItems });
+    const currentItems = this.state.selectedItems
+    if (currentItems.length <= 5 ) {
+      currentItems.push(selectedItems)
+      this.setState({
+        selectedItems: currentItems
+      })
+    } else {
+      this.setState({
+        error: 'Choose only 5 or less than 5 students for a group'
+      })
+    }
   }
 
   onChange = (e) => {
@@ -147,49 +158,84 @@ class GroupEdit extends Component {
   }
 
   async handleGroupSubmit(event) {
-    const bodyFormData = new FormData();
-    if (this.props.match.params.id !== 'new') {  
-      axios.put('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/group/', {
-        //method:'PUT',
+    event.preventDefault();
+    const {selectedItems, groupName } = this.state;
+    let selId = this.props.match.params.id;
+    let schoolId = this.state.selectedSchoolId;
+    let gradeId = this.state.selectedClassId;
+    let sectionId = this.state.selectedSectionId;
+    alert(selId);
+    alert(schoolId);
+    alert(gradeId);
+    alert(sectionId);
+    alert(selectedItems.length);
+
+    if (selId !== 'new') {
+      return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/group', {
+        method: 'PUT',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(bodyFormData),
+        body: JSON.stringify({
+          id: selId,
+          classId: gradeId,
+          sectionId: sectionId,
+          name: groupName,
+          studentNames: selectedItems
+        })
+      }).then(response => {
+        this.setState({showUpdateForm: true});
+      }).catch(error => {
+        this.setState({showErrorForm: true});
+        console.error("error", error);
+        this.setState({
+          error:`${error}`
+        });
       });
     } else {
-      const {selectedClassId, selectedSectionId, selectedSchoolId, groupName } = this.state;
-      alert('section  = '+selectedSectionId);
-      alert('class= '+selectedClassId);
-      alert('school  = '+selectedSchoolId);
-      alert('groupName = '+groupName);
-       bodyFormData.set('schoolName', selectedSectionId);
-        bodyFormData.set('grade', this.state.selectedGradeValue);
-        bodyFormData.set('sectionName', this.state.selectedSectionName);
-        bodyFormData.set('name', groupName);
-        console.log('Darshan = '+bodyFormData.values);
-      axios.post('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/group/', {
-       // method: 'POST',
+      return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/group', {
+        method: 'POST',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(bodyFormData),
+        body: JSON.stringify({
+          classId: gradeId,
+          sectionId: sectionId,
+          name: groupName,
+          studentNames: selectedItems
+        })
+      }).then(response => {
+        this.setState({showAddForm: true});
+      }).catch(error => {
+        this.setState({showErrorForm: true});
+        console.error("error", error);
+        this.setState({
+          error:`${error}`
+        });
       });
     }
-    this.props.history.push('/groups');
   }
 
   render() {
     const {item, groupName, sectionName, selectedSchool, selectedGrade, 
       selectedSection, selectedItems, schools, 
-      grades, sections, students, schoolName} = this.state;
+      grades, sections, students, schoolName, error} = this.state;
+      if(error){
+        return (
+            <p>
+              There was an error loading the response.. {'  '}
+              <Button color="primary" onClick={() => this.viewGroups()}  tag={Link} to="/groups">Try Again</Button>
+            </p>
+        );
+      }
 //    const title = <h2>{this.props.match.params.id ? 'Edit Group' : 'Add Group'}</h2>;
     if (this.props.match.params.id !== 'new') {
       return <div className="app">
         <Container>
           <h2>Edit Group</h2>
-          <Form onSubmit={this.handleSubmit}>
+          <Form onSubmit={this.handleGroupSubmit}>
             <div className="row">
             <FormGroup className="col-md-3 mb-3">
               <Label for="name">School Name</Label>

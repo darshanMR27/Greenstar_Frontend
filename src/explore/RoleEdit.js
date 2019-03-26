@@ -15,19 +15,23 @@ class RoleEdit extends Component {
 
   state = {
     roleName: "",
-    password:"",
-    privilages:[]
+    password:""
   }
 
   constructor(props) {
     super(props);
     this.state = {
       item: this.emptyItem,
-      privilages : [],
-      selectedPrivilages: []
+      privilages : [{label:"ALL", id:1},
+      {label:"DASHBOARD",id:2},
+     {label:"REPORTS",id:3},
+     {label:"SCHOOL_READ",id:4},
+    {label:"SCHOOL_WRITE",id:5}],
+      selectedItems: []
     };
     this.onChange = this.onChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.roleSubmit = this.roleSubmit.bind(this);
+    this.handlePrivilageschange = this.handlePrivilageschange.bind(this);
   }
 
   async componentDidMount() {
@@ -42,18 +46,19 @@ class RoleEdit extends Component {
           privilages:role.privilages
         });
     } else {
-      this.setState({showForm: true});
-      return axios.get(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/roles/privilages`)
-      .then(result => {
-        console.log(result);
-        this.setState({
-          privilages: result.data, error:false});
-        }).catch(error => {
-        console.error("error", error);
-        this.setState({
-          error:`${error}`
-        });
-      });
+      // this.setState({showForm: true});
+      // return axios.get(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/roles/privilages`)
+      // .then(result => {
+      //   console.log(result);
+      //   this.setState({
+      //     privilages: result.data, 
+      //     error:false});
+      //   }).catch(error => {
+      //   console.error("error", error);
+      //   this.setState({
+      //     error:`${error}`
+      //   });
+      // });
     }
   }
 
@@ -63,33 +68,69 @@ class RoleEdit extends Component {
     });
   }
 
-  async handleSubmit(event) {
-    //event.preventDefault();
-    const {item, roleName, password, selectedPrivilages} = this.state;
-    //alert(selectedItems.length);   
-  //   alert('School = '+selectedSchool.label);
-  //  alert('Grade = '+selectedGrade.label);
-  //   alert('Section = '+selectedSection.label);
-  //   alert('Group = '+groupName);
-    
-    await fetch('/api/school', {
-      method: (item.id) ? 'PUT' : 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(item),
-    });
-    this.props.history.push('/roles');
+  handlePrivilageschange(selectedItems) {
+   // alert(selectedItems);
+    selectedItems.forEach( selectedOption => 
+      console.log( `Selected: ${selectedOption.id}` ) 
+    );
+    this.setState({ selectedItems });
+  }
+
+  async roleSubmit(event) {
+    event.preventDefault();
+    const {roleName, privilages} = this.state;
+    const selId = this.props.match.params.id;
+    if (selId !== 'new') {  
+      return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/roles/update', {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: selId,
+          label: roleName,
+          privilages: this.state.selectedItems
+        })
+      }).then(response => {
+        this.setState({showUpdateForm: true});
+      }).catch(error => {
+        this.setState({showErrorForm: true});
+        console.error("error", error);
+        this.setState({
+          error:`${error}`
+        });
+      });
+    } else {
+      return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/roles/add', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          label: roleName,
+          privilages: this.state.selectedItems
+        })
+      }).then(response => {
+        this.setState({showAddForm: true});
+      }).catch(error => {
+        this.setState({showErrorForm: true});
+        console.error("error", error);
+        this.setState({
+          error:`${error}`
+        });
+      });
+    }
   }
 
   render() {
-    const {item,  roleName, rolePassword, privilages, selectedPrivilages} = this.state;
+    const {item,  roleName, rolePassword, privilages, selectedItems} = this.state;
     const title = <h2>{item.id ? 'Edit Role' : 'Add Role'}</h2>;
     return <div className="app">
       <Container>
         {title}
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.roleSubmit}>
           <div className="row">
                 <FormGroup className="col-md-3 mb-3">
                     <Label for="roleName">Role Name</Label>
@@ -106,7 +147,7 @@ class RoleEdit extends Component {
             <div className="row">
               <FormGroup className="col-md-7 mb-3">
                 <Label for="student">Privilage's</Label>
-                <MultiSelect items={privilages} selectedItems={selectedPrivilages} onChange={this.handleEditMultiChange}/>
+                <MultiSelect items={privilages} selectedItems={selectedItems} onChange={this.handlePrivilageschange}/>
               </FormGroup>
             </div>
           <FormGroup>   

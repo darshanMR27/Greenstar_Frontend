@@ -26,7 +26,7 @@ class StudentList extends Component {
   this.handleSchoolChange = this.handleSchoolChange.bind(this);
   this.handleClassChange = this.handleClassChange.bind(this);
   this.handleSectionChange = this.handleSectionChange.bind(this);
-  this.handleGroupChange = this.handleGroupChange.bind(this);
+  //this.handleGroupChange = this.handleGroupChange.bind(this);
   this.remove = this.remove.bind(this);
   this.onSubmit = this.onSubmit.bind(this);
 }
@@ -78,27 +78,7 @@ componentDidMount(){
   handleSectionChange = (selectedSec) => {
     this.setState({ selectedSec });
     //alert("selectedSection="+selectedSection);
-    return axios.get(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/group/section/`+selectedSec.id)
-    .then(result => {
-      console.log(result);
-      this.setState({
-        groups: result.data,
-        loading:false,
-        error:false
-      });
-    }).catch(error => {
-      console.error("error", error);
-      this.setState({
-        error:`${error}`,
-        loading:false
-      });
-    });
-  }
-
-  handleGroupChange = (selectedGroup) => {
-    this.setState({ selectedGroup });
-    //alert("selectedSection="+selectedSection);
-    return axios.get(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/student/group/`+selectedGroup.id)
+    return axios.get(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/student/section/`+selectedSec.id)
     .then(result => {
       console.log(result);
       this.setState({
@@ -114,6 +94,26 @@ componentDidMount(){
       });
     });
   }
+
+  // handleGroupChange = (selectedGroup) => {
+  //   this.setState({ selectedGroup });
+  //   //alert("selectedSection="+selectedSection);
+  //   return axios.get(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/student/group/`+selectedGroup.id)
+  //   .then(result => {
+  //     console.log(result);
+  //     this.setState({
+  //       students: result.data,
+  //       loading:false,
+  //       error:false
+  //     });
+  //   }).catch(error => {
+  //     console.error("error", error);
+  //     this.setState({
+  //       error:`${error}`,
+  //       loading:false
+  //     });
+  //   });
+  // }
 
   onSubmit = async () => {
     //alert('Inside onSubmit');
@@ -146,7 +146,10 @@ componentDidMount(){
   
   hideHeader = async () => {
     this.setState({showForm: false});
-    this.props.history.push('/students');
+  }
+
+  addHeader = async () => {
+    this.setState({showForm: false});
   }
 
   async remove(id) {
@@ -174,7 +177,7 @@ componentDidMount(){
             <Container>
               <Form>
                   <FormGroup>
-                    <Button color="success" onClick={() => this.hideHeader()}  tag={Link} to="/students/new">Add Student</Button>{'     '}
+                    <Button color="success" onClick={() => this.addHeader()}  tag={Link} to="/students/new">Add Student</Button>{'     '}
                   </FormGroup>
               </Form>
           </Container>
@@ -193,10 +196,6 @@ componentDidMount(){
                         <td className="col-md-3 mb-3">
                           <Label for="section">Section</Label>
                           <Select options={ sections } name="section" id="section" onChange={this.handleSectionChange} value={selectedSection}/>
-                       </td>
-                       <td className="col-md-3 mb-3">
-                          <Label for="section">Group</Label>
-                          <Select options={ groups } name="group" id="group" onChange={this.handleGroupChange} value={selectedGroup}/>
                        </td>
                       </tr>
                 <Table className="mt-4" style={{background: 'lightgray'}}>

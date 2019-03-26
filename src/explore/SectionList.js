@@ -132,9 +132,9 @@ componentDidMount(){
                   <tbody>
                   {sections.map(section => (
                         <tr key={section.id}>
-                            <td style={{whiteSpace: 'nowrap'}}>{section.school}</td>
-                            <td>{section.class}</td>
-                            <td>{section.section}</td>
+                            <td style={{whiteSpace: 'nowrap'}}>{section.schoolName}</td>
+                            <td>{section.className}</td>
+                            <td>{section.label}</td>
                             <td>
                             <ButtonGroup>
                                 <Button size="sm" color="primary" onClick={() => this.hideHeader()} tag={Link} to={"/sections/" + section.id}>Edit</Button>

@@ -102,7 +102,7 @@ componentDidMount(){
                   <thead>
                     <tr>
                       <th width="20%">School</th>
-                      <th width="20%">Grades</th>
+                      <th width="20%">Grade</th>
                       <th width="20%">Action</th>
                     </tr>
                   </thead>

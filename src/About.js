@@ -4,9 +4,6 @@ class About extends Component{
  render(){
 return (
 <div>
-    <h1>
-    About Outreach
-    </h1>
 </div>
 )
  }

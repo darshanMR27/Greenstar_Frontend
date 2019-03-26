@@ -37,7 +37,14 @@ class StudentEdit extends Component {
     gradeName:null,
     sectionName:null,
     groupName:null,
-    gender:null
+    gender:null,
+    studentName:null,
+    rollNumber:null,
+    caste:null,
+    religion:null,
+    address:null,
+    pinCode:null,
+    city:null,
   }
 
   constructor(props) {
@@ -60,10 +67,10 @@ class StudentEdit extends Component {
     this.handleGroupChange = this.handleGroupChange.bind(this);
     this.handleJoinDateChange = this.handleJoinDateChange.bind(this);
     this.studentSubmit = this.studentSubmit.bind(this);
+    this.onPinCodeChange = this.onPinCodeChange.bind(this);
   }
 
   async componentDidMount() {
-    //alert('GroupID = '+this.props.match.params.id);
      if (this.props.match.params.id !== 'new') {
        const group = await (await fetch(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/student/${this.props.match.params.id}`)).json();
        console.log(group);
@@ -72,14 +79,19 @@ class StudentEdit extends Component {
            groupName:group.groupName,
            schoolName: group.schoolName,
            sectionName:group.sectionName,
-           gradeName:group.gradeName,
+           gradeName:group.clsName,
            studentName:group.label,
            rollNumber:group.rollNumber,
            caste:group.caste,
            religion:group.religion,
            address:group.address,
            pinCode:group.pincode,
-           city:group.city
+           city:group.city,
+           joiningDate:group.joiningDate,
+           gender:group.gender,
+           school : group.schoolId,
+           grade: group.clsId,
+           section: group.sectionId
          });
      } else {
        return axios.get(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/school/`)
@@ -174,6 +186,13 @@ class StudentEdit extends Component {
     });
   }
 
+  onPinCodeChange = (e) => {
+    const re = /^[0-9\b]+$/;
+      if (e.target.value === '' || re.test(e.target.value)) {
+         this.setState({pinCode: e.target.value})
+      }
+  }
+
   setGender(event) {
     this.setState({
       gender: event.target.value
@@ -184,12 +203,11 @@ class StudentEdit extends Component {
   async studentSubmit(event) {
     event.preventDefault();
     const {studentName, rollNumber, caste, religion,
-      joiningDate, address, pincode, city, gender} = this.state;
+    joiningDate, address, pinCode, city, gender, school, grade, section} = this.state;
     let selId = this.props.match.params.id;
-    let schoolId = this.state.selectedSchool.id;
-    let gradeId = this.state.selectedGrade.id;
-    let sectionId = this.state.selectedSec.id;
-    let groupId = this.state.selectedGroup.id;
+    alert(school);
+    alert(grade);
+    alert(section);
     if (selId !== 'new') {
       return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/student', {
         method: 'PUT',
@@ -200,21 +218,20 @@ class StudentEdit extends Component {
         body: JSON.stringify({
           id: selId,
           rollNumber:rollNumber,
-          name: studentName,
+          label: studentName,
           caste: caste,
           religion: religion,
           gender: gender,
           joiningDate: joiningDate,
-          schoolId: schoolId,
-          clsId: gradeId,
-          sectionId: sectionId,
-          groupId: groupId,
           city:city,
-          pincode: pincode,
-          address:address
+          pincode: pinCode,
+          address:address,
+          schoolId: school,
+          clsId: grade,
+          sectionId: section,
         })
       }).then(response => {
-        this.setState({showUpdateSchool: true});
+        this.setState({showUpdateForm: true});
       }).catch(error => {
         this.setState({showErrorForm: true});
         console.error("error", error);
@@ -223,7 +240,12 @@ class StudentEdit extends Component {
         });
       });
     } else {
+      
+      let schoolId = this.state.selectedSchool.id;
+      let gradeId = this.state.selectedGrade.id;
+      let sectionId = this.state.selectedSec.id;
       let formattedJoinDate = new Intl.DateTimeFormat("fr-ca", {year: 'numeric', month: '2-digit',day: '2-digit'}).format(joiningDate);
+     // let groupId = this.state.selectedGroup.id;
       return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/student', {
         method: 'POST',
         headers: {
@@ -232,7 +254,7 @@ class StudentEdit extends Component {
         },
         body: JSON.stringify({
           rollNumber:rollNumber,
-          name: studentName,
+          label: studentName,
           caste: caste,
           religion: religion,
           gender: gender,
@@ -240,9 +262,8 @@ class StudentEdit extends Component {
           schoolId: schoolId,
           clsId: gradeId,
           sectionId: sectionId,
-          groupId: groupId,
           city:city,
-          pincode: pincode,
+          pincode: pinCode,
           address:address
         })
       }).then(response => {
@@ -258,12 +279,21 @@ class StudentEdit extends Component {
   }
 
   render() {
-    const {item, selectedGroup, selectedSchool, selectedGrade, 
+    const {error, selectedGroup, selectedSchool, selectedGrade, 
       selectedSection, schools, 
-      grades, sections, students, groups, studentName, 
+      grades, sections, groups, studentName, 
       rollNumber, caste, religion, joiningDate, address, pinCode,city,
     schoolName, sectionName, gradeName, groupName, gender} = this.state;
     //const title = <h2>{item.id ? 'Edit Student' : 'Add Student'}</h2>;
+    const showAddStudent = {
+      'display': this.state.showAddForm ? 'block' : 'none'
+    };
+    const showErrorStudent = {
+      'display': this.state.showErrorForm ? 'block' : 'none'
+    };
+    const showUpdateStudent = {
+      'display': this.state.showUpdateForm ? 'block' : 'none'
+    };
     if (this.props.match.params.id !== 'new') {
         return <div className="app">
         <Container>
@@ -281,10 +311,6 @@ class StudentEdit extends Component {
           <FormGroup className="col-md-3 mb-3">
             <Label for="sectionName">Section</Label>
             <Input type="text" ref="sectionName" name="sectionName" id="sectionName"  value={sectionName}/>
-          </FormGroup>
-          <FormGroup className="col-md-3 mb-3">
-            <Label for="groupName">Group</Label>
-            <Input type="text" ref="groupName" name="groupName" id="groupName"  value={groupName}/>
           </FormGroup>
             <FormGroup className="col-md-3 mb-3">
               <Label for="student">Student Name</Label>
@@ -308,7 +334,7 @@ class StudentEdit extends Component {
             </FormGroup>
             <FormGroup className="col-md-3 mb-3">
               <Label for="pincode">Pin Code</Label>
-              <Input type="text" ref="pinCode" name="pinCode" id="pinCode" placeholder="Enter Pin Code" onChange={e => this.onChange(e)}  value={pinCode}/>
+              <Input type="text" ref="pinCode" name="pinCode" id="pinCode" placeholder="Enter Pin Code" onChange={e => this.onPinCodeChange(e)}  value={pinCode}/>
             </FormGroup>
             <FormGroup className="col-md-3 mb-3">
               <Label for="city">City</Label>
@@ -316,12 +342,12 @@ class StudentEdit extends Component {
             </FormGroup>
             <FormGroup className="col-md-3 mb-3 monthPickerClass">
               <Label for="joiningDate">Joining Date</Label>
-              <DatePicker selected={this.state.joiningDate} className="datePicker" placeholderText="Select Date" onChange={this.handleJoinDateChange} dateFormat="dd/MM/yyyy"/>
+              <DatePicker selected={joiningDate} className="datePicker" placeholderText="Select Date" onChange={this.handleJoinDateChange} dateFormat="dd/MM/yyyy"/>
             </FormGroup>
-            <FormGroup className="col-md-3 mb-3" onChange={this.setGender.bind(this)}>
-              <Label for="gender">Gender</Label>
-              <Input type="radio" value="MALE" name="gender" defaultChecked={gender === "MALE"}/> Male
-              <Input type="radio" value="FEMALE" name="gender" defaultChecked={gender === "FEMALE"}/> Female
+            <FormGroup className="col-md-3 mb-3" style={{display:'inline-block'}} onChange={(e) => this.setState({ selected: e.target.value })} >
+              <Label for="gender">Gender</Label><br></br>
+              <Input type="radio" value="male" name="gender" id="gender" defaultChecked={this.state.gender === "male"}/> Male &nbsp;&nbsp;
+              <Input type="radio" value="female" name="gender" id="gender" defaultChecked={this.state.gender === "female"}/> Female
             </FormGroup>
             </div>
           <FormGroup>   
@@ -330,6 +356,9 @@ class StudentEdit extends Component {
           </FormGroup>
         </Form>
       </Container>
+      <div style={showUpdateStudent}>
+            <p style={{color: 'blue'}}>{schoolName} School Updated successfully</p>
+      </div>
      </div>
     } else {
         return <div className="app">
@@ -351,10 +380,6 @@ class StudentEdit extends Component {
             <Label for="section">Section</Label>
             <Select options={ sections } name="section" id="section" onChange={this.handleSectionChange} value={selectedSection}/>
           </FormGroup>
-          <FormGroup className="col-md-3 mb-3">
-            <Label for="section">Group</Label>
-            <Select options={ groups } name="group" id="group" onChange={this.handleGroupChange} value={selectedGroup}/>
-          </FormGroup>
             <FormGroup className="col-md-3 mb-3">
               <Label for="student">Student Name</Label>
               <Input type="text" ref="studentName" name="studentName" id="studentName" placeholder="Enter Student Name" onChange={e => this.onChange(e)}  value={studentName}/>
@@ -377,7 +402,7 @@ class StudentEdit extends Component {
             </FormGroup>
             <FormGroup className="col-md-3 mb-3">
               <Label for="pincode">Pin Code</Label>
-              <Input type="text" ref="pinCode" name="pinCode" id="pinCode" placeholder="Enter Pin Code" onChange={e => this.onChange(e)}  value={pinCode}/>
+              <Input type="text" ref="pinCode" name="pinCode" id="pinCode" placeholder="Enter Pin Code" onChange={e => this.onPinCodeChange(e)}  value={pinCode}/>
             </FormGroup>
             <FormGroup className="col-md-3 mb-3">
               <Label for="city">City</Label>
@@ -389,8 +414,8 @@ class StudentEdit extends Component {
             </FormGroup>
             <FormGroup className="col-md-3 mb-3" style={{display:'inline-block'}} onChange={this.setGender.bind(this)}>
               <Label for="gender">Gender</Label><br></br>
-              <Input type="radio" value="MALE" name="gender"/> Male &nbsp;&nbsp;
-              <Input type="radio" value="FEMALE" name="gender"/> Female
+              <Input type="radio" value="male" name="gender"/> Male &nbsp;&nbsp;
+              <Input type="radio" value="female" name="gender"/> Female
             </FormGroup>
             </div>
           <FormGroup>   
@@ -399,6 +424,12 @@ class StudentEdit extends Component {
           </FormGroup>
         </Form>
       </Container>
+        <div style={showAddStudent}>
+              <p style={{color: 'darkgreen'}}>{schoolName} Student Added successfully</p>
+        </div>
+        <div style={showErrorStudent}>
+            <p style={{color: 'red'}}>{error} while adding / updating student</p>
+        </div>
     </div>
     }
   }
