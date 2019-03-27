@@ -166,3 +166,9 @@ text-transform: uppercase;
 td.linebreak p {
   width: 10%;
 }
+
+/*BootstrapTable*/
+.tableStyle {
+  width: 100%;
+  background-color: transparent;
+}

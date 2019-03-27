@@ -3,7 +3,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Label} from 'reactstrap';
 import Select from 'react-select';
 import { Link } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import "@kenshooui/react-multi-select/dist/style.css";
 import axios from 'axios';
 import DatePicker from "react-datepicker";
@@ -178,39 +177,31 @@ componentDidMount(){
               </p>
           );
       }
-
-      //const thc = [];
-
       var thc = [];
-      var finalcolumns=[];
-      var columns=[];
       var dateLoaded = false;
-      console.log('Report Length = '+reportData.length);
-      
+     
       for(var i=0;i<reportData.length;i++){
-       
-        console.log('Performance Length = '+reportData[i].performanceData.length);
-        var l=Object.keys(reportData[i].performanceData).length;
-        var data = reportData[i];
-        console.log('Length = '+l);
+        var l=Object.keys(reportData[i].performanceData).length;      
         for(var j=0;j<l;j++){
-          console.log('attendance = '+reportData[i].performanceData[j] + ', dateLoaded = ' +dateLoaded);
-          if(!dateLoaded){
-            console.log('inside dateLoaded');
-            
-            thc.push(
-              <TableHeaderColumn  row='0' colSpan='3' headerAlign='center' dataField={reportData[i].performanceData[j].date} >{reportData[i].performanceData[j].date}</TableHeaderColumn>,
-            );
-          } else {
+           
+            if(!dateLoaded){
               thc.push(
+                <TableHeaderColumn  row='0' colSpan='3' headerAlign='center' dataField={reportData[i].performanceData[j].date} >{reportData[i].performanceData[j].date}</TableHeaderColumn>,
+              );
+              dateLoaded = true;
+            } 
+          else {
+            reportData[i].attendance = reportData[i].performanceData[j].attendance;
+            reportData[i].discipline = reportData[i].performanceData[j].discipline;
+            reportData[i].homeWork = reportData[i].performanceData[j].homeWork;
+            thc.push(
                 <TableHeaderColumn row='1' dataField='attendance'>Attendance</TableHeaderColumn>,
                 <TableHeaderColumn row='1' dataField="discipline">Discipline</TableHeaderColumn>,
                 <TableHeaderColumn row='1' dataField="homeWork">Home Work</TableHeaderColumn>,
               );
-             
+              dateLoaded = false;
             }      
          }
-         dateLoaded = true;
         }
         return (
           <div className="dashboard">
@@ -249,12 +240,12 @@ componentDidMount(){
               </tr>
             
             <div className="report">
-            {<BootstrapTable data={ reportData } >
-                    <TableHeaderColumn row='0' rowSpan='2' dataField='rollNum' isKey>Roll No</TableHeaderColumn>
+            {<BootstrapTable data={ reportData } className="tableStyle">
+                    <TableHeaderColumn row='0' rowSpan='2' style={{ width: 10 }} dataField='rollNum' isKey>Roll No</TableHeaderColumn>
                     <TableHeaderColumn row='0' rowSpan='2' dataField="studentName">Student Name</TableHeaderColumn>
                     <TableHeaderColumn row='0' rowSpan='2'  dataField='caste'>Caste</TableHeaderColumn>
                     {
-                        thc
+                      thc
                     }
             </BootstrapTable> }
             </div>

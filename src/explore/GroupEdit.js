@@ -138,17 +138,20 @@ class GroupEdit extends Component {
   }
   handleEditMultiChange(selectedItems) {
     this.setState({ selectedItems });
-    const currentItems = this.state.selectedItems
-    if (currentItems.length <= 5 ) {
-      currentItems.push(selectedItems)
-      this.setState({
-        selectedItems: currentItems
-      })
-    } else {
-      this.setState({
-        error: 'Choose only 5 or less than 5 students for a group'
-      })
-    }
+    selectedItems.forEach( selectedOption => 
+        console.log( `Selected: ${selectedOption.label}` ) 
+    );
+    // const currentItems = this.state.selectedItems
+    // if (currentItems.length <= 5 ) {
+    //   currentItems.push(selectedItems)
+    //   this.setState({
+    //     selectedItems: currentItems
+    //   })
+    // } else {
+    //   this.setState({
+    //     error: 'Choose only 5 or less than 5 students for a group'
+    //   })
+    // }
   }
 
   onChange = (e) => {
@@ -159,7 +162,7 @@ class GroupEdit extends Component {
 
   async handleGroupSubmit(event) {
     event.preventDefault();
-    const {selectedItems, groupName } = this.state;
+    const {groupName } = this.state;
     let selId = this.props.match.params.id;
     let schoolId = this.state.selectedSchoolId;
     let gradeId = this.state.selectedClassId;
@@ -168,53 +171,58 @@ class GroupEdit extends Component {
     alert(schoolId);
     alert(gradeId);
     alert(sectionId);
-    alert(selectedItems.length);
-
-    if (selId !== 'new') {
-      return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/group', {
-        method: 'PUT',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: selId,
-          classId: gradeId,
-          sectionId: sectionId,
-          name: groupName,
-          studentNames: selectedItems
-        })
-      }).then(response => {
-        this.setState({showUpdateForm: true});
-      }).catch(error => {
-        this.setState({showErrorForm: true});
-        console.error("error", error);
-        this.setState({
-          error:`${error}`
-        });
-      });
+    alert(this.state.selectedItems.length);
+    if(this.state.selectedItems.length > 5){
+      this.setState({
+          error: 'Choose only 5 or less than 5 students for a group'
+      })
     } else {
-      return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/group', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          classId: gradeId,
-          sectionId: sectionId,
-          name: groupName,
-          studentNames: selectedItems
-        })
-      }).then(response => {
-        this.setState({showAddForm: true});
-      }).catch(error => {
-        this.setState({showErrorForm: true});
-        console.error("error", error);
-        this.setState({
-          error:`${error}`
+      if (selId !== 'new') {
+        return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/group', {
+          method: 'PUT',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: selId,
+            classId: gradeId,
+            sectionId: sectionId,
+            name: groupName,
+            studentNames: this.state.selectedItems
+          })
+        }).then(response => {
+          this.setState({showUpdateForm: true});
+        }).catch(error => {
+          this.setState({showErrorForm: true});
+          console.error("error", error);
+          this.setState({
+            error:`${error}`
+          });
         });
-      });
+      } else {
+        return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/group', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            classId: gradeId,
+            sectionId: sectionId,
+            name: groupName,
+            studentNames: this.state.selectedItems
+          })
+        }).then(response => {
+          this.setState({showAddForm: true});
+        }).catch(error => {
+          this.setState({showErrorForm: true});
+          console.error("error", error);
+          this.setState({
+            error:`${error}`
+          });
+        });
+      }
     }
   }
 

@@ -95,7 +95,7 @@ class RoleList extends Component {
                     <tr key={role.id}>
                       <td style={{whiteSpace: 'nowrap'}}>{role.label}</td>
                       {role.privilages.map(privilage => (
-                        <td style={{whiteSpace: 'normal'}}>{privilage.label}</td>
+                        <tr style={{whiteSpace: 'normal'}}>{privilage.label}</tr>
                       ))}
                       <td>
                         <ButtonGroup>

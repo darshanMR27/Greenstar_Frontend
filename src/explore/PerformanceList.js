@@ -177,9 +177,7 @@ class GroupList extends Component {
                   <td>{group.schoolName}</td>
                   <td>{group.className}</td>
                   <td>{group.sectionName}</td>
-                  {group.studentNames.map(student => (
-                        <tr style={{whiteSpace: 'normal'}}>{student}</tr>
-                      ))}
+                  <td style={{whiteSpace:'nowrap'}}>{group.studentNames}</td>
                   <td>
                     <ButtonGroup>
                       <Button size="sm" color="primary" onClick={() => this.hideHeader()} tag={Link} to={"/groups/"+ group.id}>Edit</Button>

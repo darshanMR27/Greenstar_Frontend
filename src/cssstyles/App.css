@@ -219,17 +219,6 @@
   width:300px;
   text-align:left;
   }
-  table {
-    counter-reset: tableCount;
-  }
-  .counterCell:before {
-    content: counter(tableCount);
-    counter-increment: tableCount;
-  }
-  .counterCell {
-  text-align: center;
-  width:50px;
-  }
   .button-center {
   text-align: center;
   }
