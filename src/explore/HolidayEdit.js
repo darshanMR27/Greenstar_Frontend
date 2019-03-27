@@ -122,7 +122,7 @@ class HolidayEdit extends Component {
       'display': this.state.showUpdateForm ? 'block' : 'none'
     };
     const title = <h2>{item.id ? 'Edit Holiday' : 'Add Holiday'}</h2>;
-    return <div className="app">
+    return <div className="dashboard">
       <Container>
         {title}
         <Form onSubmit={this.holidaySubmit}>

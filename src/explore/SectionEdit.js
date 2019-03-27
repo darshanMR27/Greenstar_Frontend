@@ -177,7 +177,7 @@ class SectionEdit extends Component {
       }; 
     //const title = <h2>{item.id ? 'Edit Section' : 'Add Section'}</h2>;
     if (this.props.match.params.id !== 'new') {
-        return <div className="app">
+        return <div className="dashboard">
         <Container>
             <h2>Edit Section</h2>
             <Form onSubmit={this.sectionSubmit}>
@@ -206,7 +206,7 @@ class SectionEdit extends Component {
           </div>
         </div>
     } else{
-        return <div className="app">
+        return <div className="dashboard">
         <Container>
             <h2>Add Section</h2>
             <Form onSubmit={this.sectionSubmit}>

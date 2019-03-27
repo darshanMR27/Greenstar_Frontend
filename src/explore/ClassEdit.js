@@ -124,8 +124,8 @@ class ClassEdit extends Component {
   }
 
   render() {
-    const {item, selectedSchool, gradeName,  schools, 
-      grades, schoolName, error} = this.state;
+    const {selectedSchool, gradeName,  schools, 
+      schoolName, error} = this.state;
       const showAddClass = {
         'display': this.state.showAddForm ? 'block' : 'none'
       };
@@ -137,7 +137,7 @@ class ClassEdit extends Component {
       };
     //const title = <h2>{item.id ? 'Edit Class' : 'Add Class'}</h2>;
     if (this.props.match.params.id !== 'new') {
-        return <div className="app">
+        return <div className="dashboard">
         <Container>
             <h2>Edit Class</h2>
             <Form onSubmit={this.classSubmit}>
@@ -165,7 +165,7 @@ class ClassEdit extends Component {
             </div>
         </div>
     } else {
-        return <div className="app">
+        return <div className="dashboard">
         <Container>
             <h2>Add Class</h2>
             <Form onSubmit={this.classSubmit}>

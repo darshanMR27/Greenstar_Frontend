@@ -159,7 +159,7 @@ class GroupList extends Component {
                   <Select options={ sections } name="section" id="section" onChange={this.handleSectionChange} value={selectedSection}/>
               </td>
             </tr>                        
-            <Table className="mt-4" style={{background: 'lightgray'}}>
+            <Table className="mt-4">
               <thead>
                 <tr>
                   <th width="10%">Name</th>
@@ -170,7 +170,7 @@ class GroupList extends Component {
                   <th width="20%">Action</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody style={{color: '#dee2e6'}}>
               {data.map(group => (
                 <tr key={group.id}>
                   <td style={{whiteSpace: 'nowrap'}}>{group.label}</td>

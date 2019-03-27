@@ -83,7 +83,7 @@ componentDidMount(){
           </div>
             <div style={showHide}>
                 <h2>List Holidays</h2>
-                <Table className="mt-4"  style={{background: 'lightgray'}}>
+                <Table className="mt-4">
                   <thead>
                     <tr>
                       <th width="20%">Holiday Date</th>
@@ -92,7 +92,7 @@ componentDidMount(){
                       <th width="20%">Action</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody style={{color: '#dee2e6'}}>
                   {holidays.map(holiday => (
                     <tr key={holiday.id}>
                       <td>{holiday.date}</td>

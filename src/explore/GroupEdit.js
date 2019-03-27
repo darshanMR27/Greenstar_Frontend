@@ -123,7 +123,7 @@ class GroupEdit extends Component {
     this.setState({selectedSectionId});
       return axios.get(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/student/section/`+selectedSection.id)
       .then(result => {
-        console.log(result);
+        console.log(result.label);
         this.setState({
           students: result.data,
           error:false
@@ -136,11 +136,14 @@ class GroupEdit extends Component {
         });
       });
   }
-  handleEditMultiChange(selectedItems) {
-    this.setState({ selectedItems });
-    selectedItems.forEach( selectedOption => 
-        console.log( `Selected: ${selectedOption.label}` ) 
+  handleEditMultiChange(selectedStudents) {
+    this.setState({ selectedStudents });
+    const selStudents =  [];
+    selectedStudents.forEach( selectedOption => 
+        //console.log( `Selected: ${selectedOption.label}` ) 
+        selStudents.push(selectedOption.id)
     );
+    this.setState({selStudents});
     // const currentItems = this.state.selectedItems
     // if (currentItems.length <= 5 ) {
     //   currentItems.push(selectedItems)
@@ -164,21 +167,18 @@ class GroupEdit extends Component {
     event.preventDefault();
     const {groupName } = this.state;
     let selId = this.props.match.params.id;
-    let schoolId = this.state.selectedSchoolId;
+    //let schoolId = this.state.selectedSchoolId;
     let gradeId = this.state.selectedClassId;
-    let sectionId = this.state.selectedSectionId;
-    alert(selId);
-    alert(schoolId);
-    alert(gradeId);
-    alert(sectionId);
-    alert(this.state.selectedItems.length);
-    if(this.state.selectedItems.length > 5){
+    let sectionId = this.state.selectedSectionId;  
+    alert(this.state.selStudents.length);  
+    if(this.state.selStudents.length > 5){
+      this.setState({showErrorForm: true});
       this.setState({
-          error: 'Choose only 5 or less than 5 students for a group'
-      })
+        error:'Choose only 5 or less than 5 students for a group'
+      });
     } else {
       if (selId !== 'new') {
-        return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/group', {
+        fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/group', {
           method: 'PUT',
           headers: {
             'Accept': 'application/json',
@@ -186,13 +186,15 @@ class GroupEdit extends Component {
           },
           body: JSON.stringify({
             id: selId,
+            size: this.state.selStudents.length,
             classId: gradeId,
             sectionId: sectionId,
-            name: groupName,
-            studentNames: this.state.selectedItems
+            label: groupName,
+            studentIds: this.state.selStudents
           })
         }).then(response => {
           this.setState({showUpdateForm: true});
+          this.setState({showErrorForm: false});
         }).catch(error => {
           this.setState({showErrorForm: true});
           console.error("error", error);
@@ -201,20 +203,22 @@ class GroupEdit extends Component {
           });
         });
       } else {
-        return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/group', {
+        fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/group', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
+            size: this.state.selStudents.length,
             classId: gradeId,
             sectionId: sectionId,
-            name: groupName,
-            studentNames: this.state.selectedItems
+            label: groupName,
+            studentIds: this.state.selStudents
           })
         }).then(response => {
           this.setState({showAddForm: true});
+          this.setState({showErrorForm: false});
         }).catch(error => {
           this.setState({showErrorForm: true});
           console.error("error", error);
@@ -230,19 +234,21 @@ class GroupEdit extends Component {
     const {item, groupName, sectionName, selectedSchool, selectedGrade, 
       selectedSection, selectedItems, schools, 
       grades, sections, students, schoolName, error} = this.state;
-      if(error){
-        return (
-            <p>
-              There was an error loading the response.. {'  '}
-              <Button color="primary" onClick={() => this.viewGroups()}  tag={Link} to="/groups">Try Again</Button>
-            </p>
-        );
-      }
 //    const title = <h2>{this.props.match.params.id ? 'Edit Group' : 'Add Group'}</h2>;
+      const showAddGroup = {
+        'display': this.state.showAddForm ? 'block' : 'none'
+      };
+      const showErrorGroup = {
+        'display': this.state.showErrorForm ? 'block' : 'none'
+      };
+      const showUpdateGroup = {
+        'display': this.state.showUpdateForm ? 'block' : 'none'
+      };
     if (this.props.match.params.id !== 'new') {
-      return <div className="app">
+      return <div className="dashboard">
         <Container>
           <h2>Edit Group</h2>
+          <p key={error} className="errorText">{error}</p>
           <Form onSubmit={this.handleGroupSubmit}>
             <div className="row">
             <FormGroup className="col-md-3 mb-3">
@@ -273,10 +279,16 @@ class GroupEdit extends Component {
               <Button color="success" tag={Link} to="/groups">Cancel</Button>
             </FormGroup>
           </Form>
+          <div style={showUpdateGroup}>
+                <p style={{color: 'darkblue'}}>{groupName} Group Updated successfully</p>
+          </div>
+          <div style={showErrorGroup}>
+              <p style={{color: 'red'}}>{error} while adding / updating group</p>
+          </div>
         </Container>
       </div>
     } else {
-      return <div className="app">
+      return <div className="dashboard">
         <Container>
         <h2>Add Group</h2>
           <Form onSubmit={this.handleGroupSubmit}>
@@ -310,6 +322,12 @@ class GroupEdit extends Component {
               <Button color="success" tag={Link} to="/groups">Cancel</Button>
             </FormGroup>
           </Form>
+          <div style={showAddGroup}>
+                <p style={{color: 'darkgreen'}}>{groupName} Group Added successfully</p>
+        </div>
+        <div style={showErrorGroup}>
+            <p style={{color: 'red'}}>{error} while adding / updating group</p>
+        </div>
         </Container>
       </div>
     }

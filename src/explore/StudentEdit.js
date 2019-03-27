@@ -295,7 +295,7 @@ class StudentEdit extends Component {
       'display': this.state.showUpdateForm ? 'block' : 'none'
     };
     if (this.props.match.params.id !== 'new') {
-        return <div className="app">
+        return <div className="dashboard">
         <Container>
         <h2>Edit Student</h2>
         <Form onSubmit={this.studentSubmit}>
@@ -361,7 +361,7 @@ class StudentEdit extends Component {
       </div>
      </div>
     } else {
-        return <div className="app">
+        return <div className="dashboard">
         <Container>
         <h2>Add Student</h2>
         <Form onSubmit={this.studentSubmit}>

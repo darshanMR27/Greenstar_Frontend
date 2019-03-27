@@ -47,6 +47,7 @@ class App extends Component {
                     <NavDropdown.Item  href="/students">Student</NavDropdown.Item>
                     <NavDropdown.Item  href="/holidays">Holidays</NavDropdown.Item>
                     <NavDropdown.Item  href="/roles">Roles</NavDropdown.Item>
+                    <NavDropdown.Item  href="/roles">Roles</NavDropdown.Item>
                   </NavDropdown>
                 </Nav>
               </Navbar.Collapse>

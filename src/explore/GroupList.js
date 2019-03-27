@@ -159,7 +159,7 @@ class GroupList extends Component {
                   <Select options={ sections } name="section" id="section" onChange={this.handleSectionChange} value={selectedSection}/>
               </td>
             </tr>                        
-            <Table className="mt-4" style={{background: 'lightgray'}}>
+            <Table className="mt-4">
               <thead>
                 <tr>
                   <th width="10%">Name</th>
@@ -170,16 +170,18 @@ class GroupList extends Component {
                   <th width="20%">Action</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody style={{color: '#dee2e6'}}>
               {data.map(group => (
                 <tr key={group.id}>
                   <td style={{whiteSpace: 'nowrap'}}>{group.label}</td>
                   <td>{group.schoolName}</td>
                   <td>{group.className}</td>
                   <td>{group.sectionName}</td>
-                  {group.studentNames.map(student => (
-                        <tr style={{whiteSpace: 'normal'}}>{student}</tr>
+                  <td>
+                      {group.studentNames.map(student => (
+                        <tr>{student}</tr>
                       ))}
+                  </td>
                   <td>
                     <ButtonGroup>
                       <Button size="sm" color="primary" onClick={() => this.hideHeader()} tag={Link} to={"/groups/"+ group.id}>Edit</Button>

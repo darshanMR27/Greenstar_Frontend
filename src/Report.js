@@ -179,11 +179,9 @@ componentDidMount(){
       }
       var thc = [];
       var dateLoaded = false;
-     
       for(var i=0;i<reportData.length;i++){
         var l=Object.keys(reportData[i].performanceData).length;      
         for(var j=0;j<l;j++){
-           
             if(!dateLoaded){
               thc.push(
                 <TableHeaderColumn  row='0' colSpan='3' headerAlign='center' dataField={reportData[i].performanceData[j].date} >{reportData[i].performanceData[j].date}</TableHeaderColumn>,

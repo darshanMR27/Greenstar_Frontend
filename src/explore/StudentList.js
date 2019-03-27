@@ -198,7 +198,7 @@ componentDidMount(){
                           <Select options={ sections } name="section" id="section" onChange={this.handleSectionChange} value={selectedSection}/>
                        </td>
                       </tr>
-                <Table className="mt-4" style={{background: 'lightgray'}}>
+                <Table className="mt-4">
                   <thead>
                     <tr>
                       <th width="20%">Name</th>
@@ -212,7 +212,7 @@ componentDidMount(){
                       <th width="10%">Pin Code</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody style={{color: '#dee2e6'}}>
                   {students.map(student => (
                         <tr key={student.id}>
                             <td style={{whiteSpace: 'nowrap'}}>{student.label}</td>

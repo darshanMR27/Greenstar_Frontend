@@ -74,9 +74,8 @@ class RoleEdit extends Component {
 
   async roleSubmit(event) {
     event.preventDefault();
-    const {roleName, privilages, rolePassword} = this.state;
+    const {roleName, rolePassword} = this.state;
     const selId = this.props.match.params.id;
-    alert(selId);
     if (selId !== 'new') {  
       return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/roles/update', {
         method: 'PUT',
@@ -99,7 +98,6 @@ class RoleEdit extends Component {
         });
       });
     } else {
-      alert(rolePassword);
       var encryptedPwd = CryptoJS.AES.encrypt(rolePassword, 'secret key 123').toString();
        console.log("encrypted text", encryptedPwd);
       return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/roles/add', {
@@ -128,7 +126,7 @@ class RoleEdit extends Component {
   render() {
     const {item,  roleName, rolePassword, privilages, selectedItems} = this.state;
     const title = <h2>{item.id ? 'Edit Role' : 'Add Role'}</h2>;
-    return <div className="app">
+    return <div className="dashboard">
       <Container>
         {title}
         <Form onSubmit={this.roleSubmit}>

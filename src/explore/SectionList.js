@@ -120,7 +120,7 @@ componentDidMount(){
                           <Select options={ grades } name="grade" id="grade" onChange={this.handleClassChange} value={selectedGrade}/>
                        </td>
                       </tr>
-                <Table className="mt-4" style={{background: 'lightgray'}}>
+                <Table className="mt-4">
                   <thead>
                     <tr>
                       <th width="20%">School</th>
@@ -129,7 +129,7 @@ componentDidMount(){
                       <th width="20%">Action</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody style={{color: '#dee2e6'}}>
                   {sections.map(section => (
                         <tr key={section.id}>
                             <td style={{whiteSpace: 'nowrap'}}>{section.schoolName}</td>

@@ -132,7 +132,7 @@ class SchoolEdit extends Component {
       'display': this.state.showUpdateForm ? 'block' : 'none'
     };
     const title = <h2>{item.id ? 'Edit School' : 'Add School'}</h2>;
-    return <div className="app">
+    return <div className="dashboard">
       <Container>
         {title}
         <Form onSubmit={this.schoolSubmit}>

@@ -91,9 +91,9 @@ componentDidMount(){
               </Form>
           </Container>
         </div>
-            <div style={showHide}>
+            <div style={showHide} >
                 <h2>List School</h2>
-                <Table className="mt-4 sortable" style={{background: 'lightgray'}}>
+                <Table className="mt-4 sortable">
                   <thead>
                     <tr>
                       <th width="20%">Name</th>
@@ -104,7 +104,7 @@ componentDidMount(){
                       <th width="20%">Action</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody style={{color: '#dee2e6'}}>
                   {schools.map(school => (
                   <tr key={school.id}>
                     <td style={{whiteSpace: 'nowrap'}}>{school.label}</td>

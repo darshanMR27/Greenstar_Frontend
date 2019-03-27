@@ -82,7 +82,7 @@ class RoleList extends Component {
           </div>
           <div style={showHide}>
                 <h2>List Roles</h2>                        
-                <Table className="mt-4"  style={{background: 'lightgray'}}>
+                <Table className="mt-4">
                   <thead>
                     <tr>
                       <th width="10%">Role Name</th>
@@ -90,7 +90,7 @@ class RoleList extends Component {
                       <th width="10%">Action</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody style={{color: '#dee2e6'}}>
                   {data.map(role => (
                     <tr key={role.id}>
                       <td style={{whiteSpace: 'nowrap'}}>{role.label}</td>

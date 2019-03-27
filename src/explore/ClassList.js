@@ -90,7 +90,7 @@ componentDidMount(){
               </Form>
             </Container>
           </div>
-            <div style={showHide} >
+            <div style={showHide}>
                     <h2>List Class</h2>
                         <tr className="row">
                           <td className="col-md-3 mb-3">
@@ -98,7 +98,7 @@ componentDidMount(){
                           <Select options={ schools } name="school" id="school" onChange={this.handleSchoolChange} value={selectedSchool}/>
                       </td>
                 </tr>
-                <Table className="mt-4" style={{background: 'lightgray'}}>
+                <Table className="mt-4">
                   <thead>
                     <tr>
                       <th width="20%">School</th>
@@ -106,7 +106,7 @@ componentDidMount(){
                       <th width="20%">Action</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody style={{color: '#dee2e6'}}>
                   {grades.map(grade => (
                     <tr key={grade.id}>
                         <td style={{whiteSpace: 'nowrap'}}>{grade.schoolName}</td>
