@@ -6,27 +6,25 @@ import "@kenshooui/react-multi-select/dist/style.css";
 import "@kenshooui/react-multi-select/dist/style.css";
 import MultiSelect from "@kenshooui/react-multi-select";
 import axios from 'axios';
+import CryptoJS from 'crypto-js';
 
 class RoleEdit extends Component {
   emptyItem = {
       roleName: "",
-      password:""
+      rolePassword:""
   };
 
   state = {
     roleName: "",
-    password:""
+    rolePassword:"",
+    privilages : []
   }
 
   constructor(props) {
     super(props);
     this.state = {
       item: this.emptyItem,
-      privilages : [{label:"ALL", id:1},
-      {label:"DASHBOARD",id:2},
-     {label:"REPORTS",id:3},
-     {label:"SCHOOL_READ",id:4},
-    {label:"SCHOOL_WRITE",id:5}],
+      privilages : [],
       selectedItems: []
     };
     this.onChange = this.onChange.bind(this);
@@ -35,7 +33,6 @@ class RoleEdit extends Component {
   }
 
   async componentDidMount() {
-    //alert(this.props.match.params.id);
     if (this.props.match.params.id !== 'new') {
       const role = await (await fetch(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/roles/${this.props.match.params.id}`)).json();
       console.log(role);
@@ -43,22 +40,22 @@ class RoleEdit extends Component {
         {item: role,
           roleName:role.label,
           rolePassword:role.password,
-          privilages:role.privilages
+          selectedItems:role.privilages
         });
     } else {
-      // this.setState({showForm: true});
-      // return axios.get(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/roles/privilages`)
-      // .then(result => {
-      //   console.log(result);
-      //   this.setState({
-      //     privilages: result.data, 
-      //     error:false});
-      //   }).catch(error => {
-      //   console.error("error", error);
-      //   this.setState({
-      //     error:`${error}`
-      //   });
-      // });
+      this.setState({showForm: true});
+      return axios.get(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/roles/privilages`)
+      .then(result => {
+        console.log(result);
+        this.setState({
+          privilages: result.data, 
+          error:false});
+        }).catch(error => {
+        console.error("error", error);
+        this.setState({
+          error:`${error}`
+        });
+      });
     }
   }
 
@@ -69,17 +66,17 @@ class RoleEdit extends Component {
   }
 
   handlePrivilageschange(selectedItems) {
-   // alert(selectedItems);
-    selectedItems.forEach( selectedOption => 
-      console.log( `Selected: ${selectedOption.id}` ) 
-    );
+    // selectedItems.forEach( selectedOption => 
+    //   console.log( `Selected: ${selectedOption.id}` ) 
+    // );
     this.setState({ selectedItems });
   }
 
   async roleSubmit(event) {
     event.preventDefault();
-    const {roleName, privilages} = this.state;
+    const {roleName, privilages, rolePassword} = this.state;
     const selId = this.props.match.params.id;
+    alert(selId);
     if (selId !== 'new') {  
       return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/roles/update', {
         method: 'PUT',
@@ -88,7 +85,7 @@ class RoleEdit extends Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          id: selId,
+          //id: selId,
           label: roleName,
           privilages: this.state.selectedItems
         })
@@ -102,6 +99,9 @@ class RoleEdit extends Component {
         });
       });
     } else {
+      alert(rolePassword);
+      var encryptedPwd = CryptoJS.AES.encrypt(rolePassword, 'secret key 123').toString();
+       console.log("encrypted text", encryptedPwd);
       return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/roles/add', {
         method: 'POST',
         headers: {
@@ -110,7 +110,8 @@ class RoleEdit extends Component {
         },
         body: JSON.stringify({
           label: roleName,
-          privilages: this.state.selectedItems
+          privilages: this.state.selectedItems,
+          password:encryptedPwd
         })
       }).then(response => {
         this.setState({showAddForm: true});
@@ -137,7 +138,7 @@ class RoleEdit extends Component {
                     <Input type="text" ref="roleName" name="roleName" id="roleName" placeholder="Enter Role Name" onChange={e => this.onChange(e)}  value={roleName}/>
                 </FormGroup>
                 <FormGroup className="col-md-3 mb-3">
-                    <Label for="password">Password</Label>
+                    <Label for="rolePassword">Password</Label>
                     <Input ref="rolePassword"  name="rolePassword" placeholder="Enter Role Password" 
                         type="password"
                         onChange={e => this.onChange(e)} 

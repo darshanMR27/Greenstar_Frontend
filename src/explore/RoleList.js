@@ -94,7 +94,9 @@ class RoleList extends Component {
                   {data.map(role => (
                     <tr key={role.id}>
                       <td style={{whiteSpace: 'nowrap'}}>{role.label}</td>
-                      <td>{role.privilages}</td>
+                      {role.privilages.map(privilage => (
+                        <td style={{whiteSpace: 'normal'}}>{privilage.label}</td>
+                      ))}
                       <td>
                         <ButtonGroup>
                           <Button size="sm" color="primary" onClick={() => this.hideHeader()} tag={Link} to={"/roles/"+ role.label}>Edit</Button>

@@ -213,7 +213,7 @@ componentDidMount(){
          dateLoaded = true;
         }
         return (
-          <div className="app">
+          <div className="dashboard">
             <tr className="row">
                 <td className="col-md-3 mb-3 monthPickerClass">
                     <Label for="joiningDate">From Date</Label>

@@ -119,8 +119,6 @@ class SectionEdit extends Component {
     const {sectionName, grade} = this.state;
     let selId = this.props.match.params.id;
     let classId = this.state.selGradeId;
-    alert(grade);
-    alert(sectionName);
     if (selId !== 'new') {
       return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/section', {
         method: 'PUT',

@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
+import contacts from './images/contacts.jpg';
 class Contact extends Component{
  render(){
 return (
-<div>
+<div style={{ background: `url('${contacts}') no-repeat center center`}}>
     <h1>
     Contacts
     </h1>

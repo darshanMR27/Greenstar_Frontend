@@ -106,7 +106,8 @@ text-transform: uppercase;
 .dashboard {
   max-width: 100rem;
   width: 100%;
-  background: lightgray;
+  background: -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(0, 0, 0, 0.9)));
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
   padding: 1rem;
   font-size: 1rem;
   display: flex;
@@ -118,9 +119,11 @@ text-transform: uppercase;
 .report {
   max-width: 100rem;
   width: 100%;
-  background: lightgray;
+  background: -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(0, 0, 0, 0.9)));
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
   padding: 1rem;
   font-size: 1rem;
+  color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -158,4 +161,8 @@ text-transform: uppercase;
   position: relative;
   margin-top: 0;
   margin-left: 0;
+}
+
+td.linebreak p {
+  width: 10%;
 }

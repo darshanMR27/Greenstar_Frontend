@@ -221,3 +221,7 @@ ul.footer li a {
 .goButton{
   margin-top:1.6em;
 }
+
+td.linebreak p {
+  width: 10%;
+}
