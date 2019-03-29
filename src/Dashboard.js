@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Button, Label} from 'reactstrap';
+import { Button, Label, Container, Form, FormGroup} from 'reactstrap';
 import Select from 'react-select';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -1272,7 +1272,10 @@ class Dashboard extends Component {
         //Create Discipline star
         const disCanvas = this.refs.disCanvas;
         const ctx2 = disCanvas.getContext("2d");
+        const selectedGroupId = this.state.selectedGroup.id;
+        //alert('Group = ' +selectedGroupId);
         const selectedStudId = this.state.selectedStudent.id;
+        //alert('Student = ' +selectedStudId);
         axios.get("http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/star/student/"+selectedStudId+"?month="+this.state.month)
         .then(result => {
           console.log(result);
@@ -1300,10 +1303,9 @@ class Dashboard extends Component {
       }
 
     render() {
-        const {error, data, selectedSchool, selectedGrade, 
+        const {error, selectedSchool, selectedGrade, 
           selectedSec,selectedGroup,selectedStudent, 
-          schools,grades,sections, groups, students,numberOfDays,
-          maskedValue, selectedYear, selectedMonth } = this.state;
+          schools,grades,sections, groups, students} = this.state;
         const showHide = {
           'display': this.state.showForm ? 'block' : 'none'
         };
@@ -1317,54 +1319,54 @@ class Dashboard extends Component {
         }
 
         return (
-          <div> 
-            <div className="app">
-                  <tr className="row">
-                      <td className="col-md-3 mb-3 monthPickerClass">
+            <div className="dashboard">
+            <Container>
+                  <Form className="row">
+                      <FormGroup className="col-md-3 mb-3 monthPickerClass">
                           <Label for="joiningDate">Pick A Month</Label>
                           <MonthPickerInput mode="calendarOnly" format="yyyy-MM" onChange={this.handleSelect} closeOnSelect={true}/>
-                      </td>
-                      <td className="col-md-3 mb-3">
+                      </FormGroup>
+                      <FormGroup className="col-md-3 mb-3">
                           <Label for="name">School Name</Label>
                           <Select options={ schools } name="school" id="school" onChange={this.handleSchoolChange} value={selectedSchool}/>
-                      </td>
-                      <td className="col-md-3 mb-3">
+                      </FormGroup>
+                      <FormGroup className="col-md-3 mb-3">
                           <Label for="grade">Class or Grade</Label>
                           <Select options={ grades } name="grade" id="grade" onChange={this.handleClassChange} value={selectedGrade}/>
-                      </td>
-                          <td className="col-md-3 mb-3">
+                      </FormGroup>
+                      <FormGroup className="col-md-3 mb-3">
                           <Label for="section">Section</Label>
                           <Select options={ sections } name="section" id="section" onChange={this.handleSectionChange} value={selectedSec}/>
-                      </td>
-                      <td className="col-md-3 mb-3">
+                      </FormGroup>
+                      <FormGroup className="col-md-3 mb-3">
                           <Label for="section">Group</Label>
                           <Select options={ groups } name="group" id="group" onChange={this.handleGroupChange} value={selectedGroup}/>
-                      </td>
-                      <td className="col-md-3 mb-3">
+                      </FormGroup>
+                      <FormGroup className="col-md-3 mb-3">
                           <Label for="student">Student</Label>
                           <Select options={ students } name="student" id="student" onChange={this.handleStudentChange} value={selectedStudent}/>
-                      </td>
-                      <td>   
+                      </FormGroup>
+                      <FormGroup>   
                           <Button color="primary" className="goButton"  onClick={() => this.onSubmit()}>Go</Button>{' '}
-                      </td>
+                      </FormGroup>
+                  </Form>
+              </Container>
+              <div>
+                  <tr style={showHide} className="row">
+                    <td className="col-md-3 mb-3">
+                      <canvas className="starAlign-att" ref="attCanvas" width="490" height="400"></canvas>
+                      <text className="star-caption-att">Attendance</text>
+                    </td>
+                    <td className="col-md-4 mb-4">
+                      <canvas className="starAlign-hw" ref="hwCanvas" width="490" height="400"></canvas>
+                      <text className="star-caption-hw">Home Work</text>
+                    </td>
+                    <td className="col-md-5 mb-5">
+                      <canvas className="starAlign-dis" ref="disCanvas" width="490" height="400"></canvas>
+                      <text className="star-caption-dis">Discipline</text>
+                    </td>
                   </tr>
               </div>
-            <div className="dashboard">
-            <tr style={showHide} className="row">
-              <td className="col-md-3 mb-3">
-                <canvas className="starAlign-att" ref="attCanvas" width="490" height="400"></canvas>
-                <text className="star-caption-att">Attendance</text>
-              </td>
-              <td className="col-md-4 mb-4">
-                <canvas className="starAlign-hw" ref="hwCanvas" width="490" height="400"></canvas>
-                <text className="star-caption-hw">Home Work</text>
-              </td>
-              <td className="col-md-5 mb-5">
-                <canvas className="starAlign-dis" ref="disCanvas" width="490" height="400"></canvas>
-                <text className="star-caption-dis">Discipline</text>
-              </td>
-            </tr>
-            </div>
         </div>
         );
     }

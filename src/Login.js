@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Button, Input, FormGroup, Form, Container, Label } from 'reactstrap';
-import { Link, BrowserRouter as Router } from 'react-router-dom';
+import { Link, BrowserRouter as Router, Redirect } from 'react-router-dom';
 //import { Base64 } from 'js-base64';
 // import sha256 from 'crypto-js/sha256';
 // import hmacSHA512 from 'crypto-js/hmac-sha512';
@@ -9,6 +9,7 @@ import { Link, BrowserRouter as Router } from 'react-router-dom';
 import "./cssstyles/Common.css";
 import "./cssstyles/index.css";
 import axios from 'axios';
+import App from './App';
 
 function validate(roleName, password) {
     // we are going to store errors for all fields
@@ -67,18 +68,19 @@ class Login extends Component {
             return false;
          } else {
             this.setState({showForm: true});
-            return axios.get(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/roles/`+roleName)
-            .then(result => {
-              console.log(result);
-              this.setState({
-                privilages: result.data, 
-                error:false});
-              }).catch(error => {
-              console.error("error", error);
-              this.setState({
-                error:`${error}`
-              });
-            });
+            // return axios.get(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/roles/`+roleName)
+            // .then(result => {
+            //   console.log(result);
+            //   this.setState({
+            //     privilages: result.data, 
+            //     error:false});
+            //   }).catch(error => {
+            //   console.error("error", error);
+            //   this.setState({
+            //     error:`${error}`
+            //   });
+            // });
+            return <Redirect to='/App' />;
          }
          
     }
@@ -106,7 +108,7 @@ class Login extends Component {
                             
                         </FormGroup>
                         <FormGroup style={{paddingLeft:'1.2em'}}>
-                            <Button color="success" onClick={() => this.handleSubmit()} tag={Link} to={"/apps/" + roleName}>Login</Button>{'     '}
+                            <Button color="success" onClick={() => this.handleSubmit()} tag={Link} to="/">Login</Button>{'     '}
                         </FormGroup>
                     </Form>
                 </Container>

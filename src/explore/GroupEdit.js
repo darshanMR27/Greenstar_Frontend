@@ -36,9 +36,12 @@ class GroupEdit extends Component {
       sections : [],
       students : [],
       selectedItems: [],
+      selData:[],
       groupName:"",
       schoolName:"",
-      sectionName:""
+      sectionName:"",
+      classId:"",
+      sectionId:""
     };
     this.handleEditSchoolChange = this.handleEditSchoolChange.bind(this);
     this.handleEditClassChange = this.handleEditClassChange.bind(this);
@@ -50,15 +53,24 @@ class GroupEdit extends Component {
 
   async componentDidMount() {
    // alert('GroupID = '+this.props.match.params.id);
+   let selData = [];
     if (this.props.match.params.id !== 'new') {
       const group = await (await fetch(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/group/${this.props.match.params.id}`)).json();
       console.log(group);
+      group.studentNames.forEach( selectedOption => 
+        //console.log( `Selected: ${selectedOption.label}` ) 
+        selData.push(JSON.stringify({label:selectedOption}))
+      );
       this.setState(
         {item: group,
           groupName:group.label,
           schoolName: group.schoolName,
           sectionName:group.sectionName,
-          selectedItems:group.studentNames
+          classId: group.classId,
+          sectionId:group.sectionId,
+          selectedItems:group.studentNames,
+          selectedStudentIds: group.studentIds,
+
         });
     } else {
       return axios.get(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/school/`)
@@ -144,17 +156,6 @@ class GroupEdit extends Component {
         selStudents.push(selectedOption.id)
     );
     this.setState({selStudents});
-    // const currentItems = this.state.selectedItems
-    // if (currentItems.length <= 5 ) {
-    //   currentItems.push(selectedItems)
-    //   this.setState({
-    //     selectedItems: currentItems
-    //   })
-    // } else {
-    //   this.setState({
-    //     error: 'Choose only 5 or less than 5 students for a group'
-    //   })
-    // }
   }
 
   onChange = (e) => {
@@ -165,18 +166,10 @@ class GroupEdit extends Component {
 
   async handleGroupSubmit(event) {
     event.preventDefault();
-    const {groupName } = this.state;
+    const {groupName, classId, sectionId } = this.state;
     let selId = this.props.match.params.id;
+    //alert('sel Students = '+this.state.selStudents.length);
     //let schoolId = this.state.selectedSchoolId;
-    let gradeId = this.state.selectedClassId;
-    let sectionId = this.state.selectedSectionId;  
-    alert(this.state.selStudents.length);  
-    if(this.state.selStudents.length > 5){
-      this.setState({showErrorForm: true});
-      this.setState({
-        error:'Choose only 5 or less than 5 students for a group'
-      });
-    } else {
       if (selId !== 'new') {
         fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/group', {
           method: 'PUT',
@@ -186,11 +179,11 @@ class GroupEdit extends Component {
           },
           body: JSON.stringify({
             id: selId,
-            size: this.state.selStudents.length,
-            classId: gradeId,
+            size: this.state.selectedStudentIds.length,
+            classId: classId,
             sectionId: sectionId,
             label: groupName,
-            studentIds: this.state.selStudents
+            studentIds: this.state.selectedStudentIds
           })
         }).then(response => {
           this.setState({showUpdateForm: true});
@@ -203,30 +196,38 @@ class GroupEdit extends Component {
           });
         });
       } else {
-        fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/group', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            size: this.state.selStudents.length,
-            classId: gradeId,
-            sectionId: sectionId,
-            label: groupName,
-            studentIds: this.state.selStudents
-          })
-        }).then(response => {
-          this.setState({showAddForm: true});
-          this.setState({showErrorForm: false});
-        }).catch(error => {
+        if(this.state.selStudents.length > 5){
           this.setState({showErrorForm: true});
-          console.error("error", error);
           this.setState({
-            error:`${error}`
+            error:'Choose only 5 or less than 5 students for a group'
           });
-        });
-      }
+        } else {
+          let gradeId = this.state.selectedClassId;
+          let sectionId = this.state.selectedSectionId;
+          fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/group', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              size: this.state.selStudents.length,
+              classId: gradeId,
+              sectionId: sectionId,
+              label: groupName,
+              studentIds: this.state.selStudents
+            })
+          }).then(response => {
+            this.setState({showAddForm: true});
+            this.setState({showErrorForm: false});
+          }).catch(error => {
+            this.setState({showErrorForm: true});
+            console.error("error", error);
+            this.setState({
+              error:`${error}`
+            });
+          });
+        }
     }
   }
 
@@ -271,7 +272,7 @@ class GroupEdit extends Component {
             <div className="row">
               <FormGroup className="col-md-7 mb-3">
                 <Label for="student">Student's</Label>
-                <MultiSelect items={students} selectedItems={selectedItems} onChange={this.handleMultiChange}/>
+                <MultiSelect items={students} selectedItems={selectedItems}/>
               </FormGroup>
             </div>
             <FormGroup>   

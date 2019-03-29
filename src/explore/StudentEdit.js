@@ -205,9 +205,6 @@ class StudentEdit extends Component {
     const {studentName, rollNumber, caste, religion,
     joiningDate, address, pinCode, city, gender, school, grade, section} = this.state;
     let selId = this.props.match.params.id;
-    alert(school);
-    alert(grade);
-    alert(section);
     if (selId !== 'new') {
       return fetch('http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/student', {
         method: 'PUT',

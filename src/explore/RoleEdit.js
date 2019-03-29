@@ -124,7 +124,16 @@ class RoleEdit extends Component {
   }
 
   render() {
-    const {item,  roleName, rolePassword, privilages, selectedItems} = this.state;
+    const {item, error, roleName, rolePassword, privilages, selectedItems} = this.state;
+    const showAddRole = {
+      'display': this.state.showAddForm ? 'block' : 'none'
+    };
+    const showErrorRole = {
+      'display': this.state.showErrorForm ? 'block' : 'none'
+    };
+    const showUpdateRole = {
+      'display': this.state.showUpdateForm ? 'block' : 'none'
+    };
     const title = <h2>{item.id ? 'Edit Role' : 'Add Role'}</h2>;
     return <div className="dashboard">
       <Container>
@@ -149,10 +158,21 @@ class RoleEdit extends Component {
                 <MultiSelect items={privilages} selectedItems={selectedItems} onChange={this.handlePrivilageschange}/>
               </FormGroup>
             </div>
-          <FormGroup>   
-            <Button color="primary" type="submit">Save</Button>{' '}
-            <Button color="success" tag={Link} to="/roles">Cancel</Button>
-          </FormGroup>
+            <div>
+              <FormGroup>   
+                <Button color="primary" type="submit">Save</Button>{' '}
+                <Button color="success" tag={Link} to="/roles">Cancel</Button>
+              </FormGroup>
+          </div>
+          <div style={showAddRole}>
+              <p style={{color: 'darkgreen'}}>{roleName} role Added successfully</p>
+            </div>
+            <div style={showErrorRole}>
+                <p style={{color: 'red'}}>{error} while adding / updating role</p>
+            </div>
+            <div style={showUpdateRole}>
+                <p style={{color: 'blue'}}>{roleName} role Updated successfully</p>
+            </div>
         </Form>
       </Container>
     </div>

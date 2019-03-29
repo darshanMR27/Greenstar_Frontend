@@ -109,7 +109,6 @@ componentDidMount(){
                   <tbody style={{color: '#dee2e6'}}>
                   {grades.map(grade => (
                     <tr key={grade.id}>
-                        <td style={{whiteSpace: 'nowrap'}}>{grade.schoolName}</td>
                         <td>{grade.label}</td>
                         <td>
                         <ButtonGroup>

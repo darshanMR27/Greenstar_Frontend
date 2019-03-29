@@ -43,18 +43,18 @@ class RoleList extends Component {
     //this.props.history.push('/groups');
   }
 
-  async remove(id) {
-    await fetch(`/api/group/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    }).then(() => {
-      let updatedGroups = [...this.state.groups].filter(i => i.id !== id);
-      this.setState({groups: updatedGroups});
-    });
-  }
+  // async remove(id) {
+  //   await fetch(`/api/group/${id}`, {
+  //     method: 'DELETE',
+  //     headers: {
+  //       'Accept': 'application/json',
+  //       'Content-Type': 'application/json'
+  //     }
+  //   }).then(() => {
+  //     let updatedGroups = [...this.state.groups].filter(i => i.id !== id);
+  //     this.setState({groups: updatedGroups});
+  //   });
+  // }
 
   render() {
     const {error, data} = this.state;
@@ -100,7 +100,7 @@ class RoleList extends Component {
                       <td>
                         <ButtonGroup>
                           <Button size="sm" color="primary" onClick={() => this.hideHeader()} tag={Link} to={"/roles/"+ role.label}>Edit</Button>
-                          <Button size="sm" color="danger" onClick={() => this.remove(role.id)}>Delete</Button>
+                          <Button size="sm" color="danger" disabled>Delete</Button>
                         </ButtonGroup>
                       </td>
                     </tr> ))}

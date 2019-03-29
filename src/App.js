@@ -24,9 +24,11 @@ import HolidayList from "./explore/HolidayList";
 import HolidayEdit from "./explore/HolidayEdit";
 import RoleList from "./explore/RoleList";
 import RoleEdit from "./explore/RoleEdit";
+import PerformanceList from "./explore/PerformanceList";
 import "./cssstyles/Common.css";
 import "./cssstyles/index.css";
 class App extends Component {
+  
   render (){
     return (
       <Router>
@@ -47,7 +49,7 @@ class App extends Component {
                     <NavDropdown.Item  href="/students">Student</NavDropdown.Item>
                     <NavDropdown.Item  href="/holidays">Holidays</NavDropdown.Item>
                     <NavDropdown.Item  href="/roles">Roles</NavDropdown.Item>
-                    <NavDropdown.Item  href="/roles">Roles</NavDropdown.Item>
+                    <NavDropdown.Item  href="/performance">Performance</NavDropdown.Item>
                   </NavDropdown>
                 </Nav>
               </Navbar.Collapse>
@@ -72,7 +74,7 @@ class App extends Component {
               <Route path='/holidays/:id' component={HolidayEdit}/>
               <Route path='/roles' component={RoleList}/>
               <Route path='/roles/:id' component={RoleEdit}/>
-              <Route path='/apps/:id' component={App}/>
+              <Route path='/performance' component={PerformanceList}/>
             </div>
             <div>
             <Navbar expand="lg" bg="dark" variant="dark">
