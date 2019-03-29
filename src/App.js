@@ -78,7 +78,6 @@ class App extends Component {
             </div>
             <div>
             <Navbar expand="lg" bg="dark" variant="dark">
-              <Navbar.Brand style={{display: 'flex'}} className="footer-span"> @Copyright; version:1.0</Navbar.Brand>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav" >
                 <Nav className="ml-auto">

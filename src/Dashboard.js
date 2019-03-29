@@ -1190,7 +1190,6 @@ class Dashboard extends Component {
       handleSchoolChange = (selectedSchool) => {
 //        alert("selectedGrade="+selectedSchool.id);
         this.setState({ selectedSchool });
-        const bodyFormData = new FormData();
         return axios.get(`http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/class/school/`+selectedSchool.id)
         .then(result => {
           console.log(result);
@@ -1346,7 +1345,7 @@ class Dashboard extends Component {
                   <Form className="row">
                       <FormGroup className="col-md-3 mb-3 monthPickerClass">
                           <Label for="joiningDate">Pick A Month</Label>
-                          <MonthPickerInput mode="calendarOnly" format="yyyy-MM" onChange={this.handleSelect} closeOnSelect={true}/>
+                          <MonthPickerInput className="datePicker" mode="calendarOnly" format="yyyy/MM" onChange={this.handleSelect} closeOnSelect={true}/>
                       </FormGroup>
                       <FormGroup className="col-md-3 mb-3">
                           <Label for="name">School Name</Label>
