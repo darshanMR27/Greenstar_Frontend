@@ -11,6 +11,56 @@ function date_diff_indays (d1, d2) {
   var diff = Date.parse(d2) - Date.parse(d1);
   return Math.floor(diff / 86400000);
 }
+var theadRows = [];
+var headSecondRow = [];
+var tbodyRows = [];
+var nameData = [];
+var initialLoad = false;
+var myFunctionFlag = false;
+var attendance;
+var discipline;
+var homeWork;
+var performanceLength ;
+
+function reportFunction(reportData, performanceLength){
+   if(myFunctionFlag!=true){
+       for(var i=0;i<reportData.length;i++){
+          
+    
+          tbodyRows.push(
+                  <td className="thStyle"row='1'>{reportData[i].rollNum}</td>,
+                  <td className="thStyle"row='1'>{reportData[i].studentName}</td>,
+                  <td className="thStyle"row='1'>{reportData[i].caste}</td>);
+               // tbodyRows.push({nameData});        
+          for(var j=0;j<performanceLength;j++){
+            if(reportData[i].performanceData[j] == undefined ){
+              attendance = "";
+              discipline = "";
+              homeWork = "";
+            }
+            else{ 
+              attendance = reportData[i].performanceData[j].attendance;
+              discipline = reportData[i].performanceData[j].discipline;
+              homeWork = reportData[i].performanceData[j].homeWork;
+            }
+                  tbodyRows.push(
+                    <td className="thStyle"row='1' >{attendance}</td>,
+                    <td className="thStyle"row='1' >{discipline}</td>,
+                    <td className="thStyle"row='1' >{homeWork}</td>
+                  );
+           }
+           tbodyRows.push(
+                    <td className="thStyle"row='1' >{reportData[i].summary.attendance}</td>,
+                    <td className="thStyle"row='1' >{reportData[i].summary.discipline}</td>,
+                    <td className="thStyle"row='1' >{reportData[i].summary.homeWork}</td>
+                  );
+           //tbodyRows.push( <td className="thStyle"row='1' >{attendance}</td>);
+            tbodyRows.push(<tr/>);
+        }
+        
+     myFunctionFlag = true;
+  }
+}
 class Report extends Component {
   state = {
     loading:true,
@@ -262,27 +312,34 @@ componentDidMount(){
         selectedSec,selectedGroup, schools,grades,sections, groups, reportTypes, selectedReportType } = this.state;
       var thc = [];
       var dateLoaded = false;
+      theadRows = []; 
+      headSecondRow = [];
       for(var i=0;i<indReportData.length;i++){
-        var l=Object.keys(indReportData[i].performanceData).length;      
-        for(var j=0;j<l;j++){
+           var l=Object.keys(indReportData[i].performanceData).length;  
+           for(var j=0;j<l;j++){
             if(!dateLoaded){
-              thc.push(
-                <TableHeaderColumn  row='0' colSpan='3' headerAlign='center' dataField={indReportData[i].performanceData[j].date} >{indReportData[i].performanceData[j].date}</TableHeaderColumn>,
-              );
-              dateLoaded = true;
-            } 
-          else {
-            indReportData[i].attendance = indReportData[i].performanceData[j].attendance;
-            indReportData[i].discipline = indReportData[i].performanceData[j].discipline;
-            indReportData[i].homeWork = indReportData[i].performanceData[j].homeWork;
-            thc.push(
-                <TableHeaderColumn row='1' dataField='attendance'>Attendance</TableHeaderColumn>,
-                <TableHeaderColumn row='1' dataField="discipline">Discipline</TableHeaderColumn>,
-                <TableHeaderColumn row='1' dataField="homeWork">Home Work</TableHeaderColumn>,
-              );
-              dateLoaded = false;
-            }      
+              theadRows.push(
+                <th  row='0' className="thStyle" colSpan='3' headerAlign='center' >{indReportData[i].performanceData[j].date}</th>); 
+             }
+           if(!dateLoaded ) {
+              headSecondRow.push(
+                <th row='1' className="thStyle">Attendance</th>,
+                <th row='1' className="thStyle">Discipline</th>,
+                <th row='1' className="thStyle">Home Work</th>);
+            }  
          }
+          dateLoaded = true;
+        }
+         theadRows.push( <th  row='0' className="thStyle" colSpan='3' headerAlign='center' >Summary</th>);
+         headSecondRow.push(
+                <th row='1' className="thStyle">Attendance</th>,
+                <th row='1' className="thStyle">Discipline</th>,
+                <th row='1' className="thStyle">Home Work</th>); 
+        if(indReportData.length>1){
+       performanceLength= (indReportData[0].performanceData).length; 
+        }
+        if(indReportData.length > 1){
+        reportFunction(indReportData,performanceLength);
         }
         const showErrorReport = {'display': this.state.showErrorForm ? 'block' : 'none'};
         const showIndReportSel = {'display': this.state.showIndReportSel ? 'block' : 'none'};
@@ -333,32 +390,70 @@ componentDidMount(){
                   <p style={{color: 'red'}}>{error}</p>
               </div>
               <div className="report" style={showIndRepHide}>
-                  {<BootstrapTable data={ indReportData } className="tableStyle">
-                      <TableHeaderColumn row='0' rowSpan='2' style={{ width: 10 }} dataField='rollNum' isKey>Roll No</TableHeaderColumn>
-                      <TableHeaderColumn row='0' rowSpan='2' dataField="studentName">Student Name</TableHeaderColumn>
-                      <TableHeaderColumn row='0' rowSpan='2'  dataField='caste'>Caste</TableHeaderColumn>
+                  {<table data={ indReportData } className="tableStyle" >
+            <thead><tr>
+                    <th className="thStyle"row='0' rowSpan='2'  dataField='rollNum' isKey  style={{align:'cente'}} >Roll No</th>
+                    <th className="thStyle"row='0' rowSpan='2' dataField="studentName">Student Name</th>
+                    <th className="thStyle"row='0' rowSpan='2'  dataField='caste'>Caste</th>{theadRows}
+                    
+                    </tr>
+                    <tr>{headSecondRow  }</tr>
+                    </thead> 
+                    <tbody>
+                      {tbodyRows}
+                    </tbody>
                       {
-                        thc
-                      }
-                  </BootstrapTable> }
+                      thc
+                    }
+            </table> }
             </div>
             <div className="report" style={showGrpRepHide}>
-                  {<BootstrapTable data={ grpReportData } className="tableStyle">
-                      <TableHeaderColumn dataField='groupName' isKey>Group Name</TableHeaderColumn>
-                      <TableHeaderColumn dataField="attendance">Attendance</TableHeaderColumn>
-                      <TableHeaderColumn dataField='discipline'>Discipline</TableHeaderColumn>
-                      <TableHeaderColumn dataField='homework'>Home Work</TableHeaderColumn>
-                      <TableHeaderColumn dataField='total'>Total</TableHeaderColumn>
-                  </BootstrapTable> }
+                    {<table className="tableStyle" >
+                      <thead><tr>
+                              <th className="thStyle"row='0' rowSpan='2'  dataField='rollNum' isKey  style={{align:'cente'}} >Group Name</th>
+                              <th className="thStyle"row='0' rowSpan='2'>Attendance</th>
+                              <th className="thStyle"row='0' rowSpan='2'>Discipline</th>
+                              <th className="thStyle"row='0' rowSpan='2'>Home Work</th>
+                              <th className="thStyle"row='0' rowSpan='2'>Total</th>
+                            </tr>
+                          </thead>
+                            <tbody>
+                              {grpReportData.map(grpReport => 
+                                    <tr>
+                                      <td className="thStyle">{grpReport.groupName}</td>
+                                      <td className="thStyle">{grpReport.attendance}</td>
+                                      <td className="thStyle">{grpReport.discipline}</td>
+                                      <td className="thStyle">{grpReport.homework}</td>
+                                      <td className="thStyle">{grpReport.total}</td>
+                                      
+                                  </tr>
+                              )}
+                        </tbody>
+                    </table>}
             </div>
             <div className="report" style={showSecRepHide}>
-                  {<BootstrapTable data={ secReportData } className="tableStyle">
-                      <TableHeaderColumn dataField='sectionName' isKey>Section Name</TableHeaderColumn>
-                      <TableHeaderColumn dataField="attendance">Attendance</TableHeaderColumn>
-                      <TableHeaderColumn dataField='discipline'>Discipline</TableHeaderColumn>
-                      <TableHeaderColumn dataField='homework'>Home Work</TableHeaderColumn>
-                      <TableHeaderColumn dataField='total'>Total</TableHeaderColumn>
-                  </BootstrapTable> }
+                  {<table className="tableStyle" >
+                      <thead><tr>
+                              <th className="thStyle"row='0' rowSpan='2' style={{align:'cente'}} >Section Name</th>
+                              <th className="thStyle"row='0' rowSpan='2'>Attendance</th>
+                              <th className="thStyle"row='0' rowSpan='2'>Discipline</th>
+                              <th className="thStyle"row='0' rowSpan='2'>Home Work</th>
+                              <th className="thStyle"row='0' rowSpan='2'>Total</th>
+                            </tr>
+                          </thead>
+                            <tbody>
+                              {secReportData.map(grpReport => 
+                                    <tr>
+                                      <td className="thStyle">{grpReport.sectionName}</td>
+                                      <td className="thStyle">{grpReport.attendance}</td>
+                                      <td className="thStyle">{grpReport.discipline}</td>
+                                      <td className="thStyle">{grpReport.homework}</td>
+                                      <td className="thStyle">{grpReport.total}</td>
+                                      
+                                  </tr>
+                              )}
+                        </tbody>
+                    </table>}
             </div>
           </div>
         );

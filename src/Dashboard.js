@@ -1276,25 +1276,47 @@ class Dashboard extends Component {
         //alert('Group = ' +selectedGroupId);
         const selectedStudId = this.state.selectedStudent.id;
         //alert('Student = ' +selectedStudId);
-        axios.get("http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/star/student/"+selectedStudId+"?month="+this.state.month)
-        .then(result => {
-          console.log(result);
-          drawAttendanceStar(result.data.attendanceDetails, ctx);
-          drawHomeWorkStar(result.data.homeWorkDetails, ctx1);
-          drawDisciplineStar(result.data.desciplineDetails, ctx2);
-          this.setState({
-              data: result.data,
-              loading:false,
-              error:false
+        if(selectedStudId !== undefined){
+          axios.get("http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/star/student/"+selectedStudId+"?month="+this.state.month)
+          .then(result => {
+            console.log(result);
+            drawAttendanceStar(result.data.attendanceDetails, ctx);
+            drawHomeWorkStar(result.data.homeWorkDetails, ctx1);
+            drawDisciplineStar(result.data.desciplineDetails, ctx2);
+            this.setState({
+                data: result.data,
+                loading:false,
+                error:false
+              });
+          }).catch(error => {
+            console.error("error", error);
+            this.setState({
+              error:`${error}`,
+              loading:false
             });
-        }).catch(error => {
-          console.error("error", error);
-          this.setState({
-            error:`${error}`,
-            loading:false
-          });
-        });  
-        this.setState({showForm: true});    
+          });  
+          this.setState({showForm: true}); 
+        } else {
+          axios.get("http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/star/group/"+selectedGroupId+"?month="+this.state.month)
+          .then(result => {
+            console.log(result);
+            drawAttendanceStar(result.data.attendanceDetails, ctx);
+            drawHomeWorkStar(result.data.homeWorkDetails, ctx1);
+            drawDisciplineStar(result.data.desciplineDetails, ctx2);
+            this.setState({
+                data: result.data,
+                loading:false,
+                error:false
+              });
+          }).catch(error => {
+            console.error("error", error);
+            this.setState({
+              error:`${error}`,
+              loading:false
+            });
+          });  
+          this.setState({showForm: true}); 
+        }  
       }
 
       handleSelect = (month, year) => {

@@ -171,4 +171,11 @@ td.linebreak p {
 .tableStyle {
   width: 100%;
   background-color: transparent;
+  border: 1px solid white;
+}
+
+.thStyle {
+   text-align: center; 
+   background-color: transparent;
+   border: 1px solid white;
 }
