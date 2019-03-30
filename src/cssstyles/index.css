@@ -138,8 +138,8 @@ ul.footer li a {
 }
 
 .datePicker {
-  width: 16em;
-  height: 2.1em;
+  width: 13em;
+  height: 2.4em;
   border: none;
 }
 
@@ -223,29 +223,33 @@ ul.footer li a {
   background-color: #eee;
 }
 .starAlign-att {
-  margin-left: -7em;
+  margin-left: -9em;
 }
 .starAlign-hw {
-  margin-left: -5em;
+  margin-left: -7em;
 }
 .starAlign-dis {
   margin-left: -5em;
 }
+.starAlign{
+  max-width: 33%;
+  float:left;
+}
 .star-caption-att {
   font-size: 1rem; 
-   margin-left: 9em;
+   margin-left: 7em;
    font-weight: bold;
    color:white;
 }
 .star-caption-hw {
   font-size: 1rem; 
-   margin-left: 11.5em;
+   margin-left: 9em;
    font-weight: bold;
    color:white;
 }
 .star-caption-dis{
   font-size: 1rem; 
-   margin-left: 12em;
+   margin-left: 11.5em;
    font-weight: bold;
    color:white;
 }
@@ -257,8 +261,3 @@ td.linebreak p {
   width: 10%;
 }
 
-/*BootstrapTable*/
-.table {
-  width: 100%;
-  background-color: red;
-}

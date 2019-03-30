@@ -186,48 +186,49 @@ componentDidMount(){
                     <h2>List Student</h2>
                         <tr className="row">
                           <td className="col-md-3 mb-3">
-                          <Label for="name">School Name</Label>
+                          <Label for="name" style={{color:'white'}}>School Name</Label>
                           <Select options={ schools } name="school" id="school" onChange={this.handleSchoolChange} value={selectedSchool}/>
                       </td>
                       <td className="col-md-3 mb-3">
-                          <Label for="grade">Class or Grade</Label>
+                          <Label for="grade" style={{color:'white'}}>Class or Grade</Label>
                           <Select options={ grades } name="grade" id="grade" onChange={this.handleClassChange} value={selectedGrade}/>
                        </td>
                         <td className="col-md-3 mb-3">
-                          <Label for="section">Section</Label>
+                          <Label for="section" style={{color:'white'}}>Section</Label>
                           <Select options={ sections } name="section" id="section" onChange={this.handleSectionChange} value={selectedSection}/>
                        </td>
                       </tr>
-                <Table className="mt-4">
+                <Table className="mt-4 tableStyle">
                   <thead>
                     <tr>
-                      <th width="20%">Name</th>
-                      <th width="20%">Roll Number</th>
-                      <th width="20%">Caste</th>
-                      <th width="20%">Religion</th>
-                      <th width="20%">Gender</th>
-                      <th width="10%">Joining Date</th>
-                      <th width="10%">Address</th>
-                      <th width="10%">City</th>
-                      <th width="10%">Pin Code</th>
+                      <th className="thStyle" width="20%">Name</th>
+                      <th className="thStyle" width="20%">Roll Number</th>
+                      <th className="thStyle" width="20%">Caste</th>
+                      <th className="thStyle" width="20%">Religion</th>
+                      <th className="thStyle" width="20%">Gender</th>
+                      <th className="thStyle" width="10%">Joining Date</th>
+                      <th className="thStyle" width="10%">Address</th>
+                      <th className="thStyle" width="10%">City</th>
+                      <th className="thStyle" width="10%">Pin Code</th>
+                      <th className="thStyle" width="10%">Action</th>
                     </tr>
                   </thead>
                   <tbody style={{color: '#dee2e6'}}>
                   {students.map(student => (
                         <tr key={student.id}>
-                            <td style={{whiteSpace: 'nowrap'}}>{student.label}</td>
-                            <td>{student.rollNumber}</td>
-                            <td>{student.caste}</td>
-                            <td>{student.religion}</td>
-                            <td>{student.gender}</td>
-                            <td>{student.joiningDate}</td>
-                            <td>{student.address}</td>
-                            <td>{student.city}</td>
-                            <td>{student.pincode}</td>
-                            <td>
+                            <td className="thStyle" style={{whiteSpace: 'nowrap'}}>{student.label}</td>
+                            <td className="thStyle">{student.rollNumber}</td>
+                            <td className="thStyle">{student.caste}</td>
+                            <td className="thStyle">{student.religion}</td>
+                            <td className="thStyle">{student.gender}</td>
+                            <td className="thStyle">{student.joiningDate}</td>
+                            <td className="thStyle">{student.address}</td>
+                            <td className="thStyle">{student.city}</td>
+                            <td className="thStyle">{student.pincode}</td>
+                            <td className="thStyle">
                             <ButtonGroup>
                                 <Button size="sm" color="primary" onClick={() => this.hideHeader()} tag={Link} to={"/students/" + student.id}>Edit</Button>
-                                <Button size="sm" color="danger" onClick={() => this.remove(student.id)}>Delete</Button>
+                                <Button size="sm" color="danger" onClick={() => this.remove(student.id)} disabled>Delete</Button>
                             </ButtonGroup>
                             </td>
                         </tr>

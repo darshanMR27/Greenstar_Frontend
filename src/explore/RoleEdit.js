@@ -141,11 +141,11 @@ class RoleEdit extends Component {
         <Form onSubmit={this.roleSubmit}>
           <div className="row">
                 <FormGroup className="col-md-3 mb-3">
-                    <Label for="roleName">Role Name</Label>
+                    <Label for="roleName" style={{color:'white'}}>Role Name</Label>
                     <Input type="text" ref="roleName" name="roleName" id="roleName" placeholder="Enter Role Name" onChange={e => this.onChange(e)}  value={roleName}/>
                 </FormGroup>
                 <FormGroup className="col-md-3 mb-3">
-                    <Label for="rolePassword">Password</Label>
+                    <Label for="rolePassword" style={{color:'white'}}>Password</Label>
                     <Input ref="rolePassword"  name="rolePassword" placeholder="Enter Role Password" 
                         type="password"
                         onChange={e => this.onChange(e)} 
@@ -154,7 +154,7 @@ class RoleEdit extends Component {
             </div>
             <div className="row">
               <FormGroup className="col-md-7 mb-3">
-                <Label for="student">Privilage's</Label>
+                <Label for="student" style={{color:'white'}}>Privilage's</Label>
                 <MultiSelect items={privilages} selectedItems={selectedItems} onChange={this.handlePrivilageschange}/>
               </FormGroup>
             </div>

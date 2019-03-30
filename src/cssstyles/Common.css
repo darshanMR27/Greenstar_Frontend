@@ -92,8 +92,14 @@ text-transform: uppercase;
 
 .errorText {
   color: red;
-  font-size: 1.5em;
+  font-size: 1em;
   text-align: left;
+}
+.loginErrorText {
+  color: red;
+  font-size: 1em;
+  text-align: left;
+  margin-left: 0.9em;
 }
 .headerColor {
   color:white;
@@ -178,4 +184,12 @@ td.linebreak p {
    text-align: center; 
    background-color: transparent;
    border: 1px solid white;
+}
+.monthPickerClass {
+  width:12.2em;
+  height:2.3em;
+  border:none;
+}
+.loginForm {
+ float:center;
 }

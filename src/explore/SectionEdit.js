@@ -183,15 +183,15 @@ class SectionEdit extends Component {
             <Form onSubmit={this.sectionSubmit}>
             <div className="row">
             <FormGroup className="col-md-3 mb-3">
-                <Label for="name">School Name</Label>
+                <Label for="name" style={{color:'white'}}>School Name</Label>
                 <Input type="text" ref="schoolName" name="schoolName" id="schoolName" value={schoolName}/>
             </FormGroup>
             <FormGroup className="col-md-3 mb-3">
-                <Label for="grade">Class or Grade</Label>
+                <Label for="grade" style={{color:'white'}}>Class or Grade</Label>
                 <Input type="text" ref="gradeName" name="gradeName" id="gradeName" value={gradeName}/>
             </FormGroup>
             <FormGroup className="col-md-3 mb-3">
-                <Label for="sectionName">Section</Label>
+                <Label for="sectionName" style={{color:'white'}}>Section</Label>
                 <Input type="text" ref="sectionName" name="sectionName" id="sectionName" placeholder="Enter Section Name" onChange={e => this.onChange(e)}  value={sectionName}/>
             </FormGroup>
                 </div>
@@ -212,17 +212,17 @@ class SectionEdit extends Component {
             <Form onSubmit={this.sectionSubmit}>
             <div className="row">
             <FormGroup className="col-md-3 mb-3">
-                <Label for="name">School Name</Label>
+                <Label for="name" style={{color:'white'}}>School Name</Label>
                 <Select options={ schools } name="school" id="school" onChange={this.handleSchoolChange} value={selectedSchool}
                         />
             </FormGroup>
             <FormGroup className="col-md-3 mb-3">
-                <Label for="grade">Class or Grade</Label>
+                <Label for="grade" style={{color:'white'}}>Class or Grade</Label>
                 <Select options={ grades } name="grade" id="grade" onChange={this.handleClassChange} value={selectedGrade}
                         />
             </FormGroup>
             <FormGroup className="col-md-3 mb-3">
-                <Label for="sectionName">Section</Label>
+                <Label for="sectionName" style={{color:'white'}}>Section</Label>
                 <Input type="text" ref="sectionName" name="sectionName" id="sectionName" placeholder="Enter Section Name" onChange={e => this.onChange(e)}  value={sectionName}/>
             </FormGroup>
                 </div>

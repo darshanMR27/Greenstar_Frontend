@@ -82,22 +82,22 @@ class RoleList extends Component {
           </div>
           <div style={showHide}>
                 <h2>List Roles</h2>                        
-                <Table className="mt-4">
+                <Table className="mt-4 tableStyle">
                   <thead>
                     <tr>
-                      <th width="10%">Role Name</th>
-                      <th width="10%">Privilages</th>
-                      <th width="10%">Action</th>
+                      <th className="thStyle" width="10%">Role Name</th>
+                      <th className="thStyle" width="10%">Privilages</th>
+                      <th className="thStyle" width="10%">Action</th>
                     </tr>
                   </thead>
                   <tbody style={{color: '#dee2e6'}}>
                   {data.map(role => (
                     <tr key={role.id}>
-                      <td style={{whiteSpace: 'nowrap'}}>{role.label}</td>
+                      <td className="thStyle" style={{whiteSpace: 'nowrap'}}>{role.label}</td>
                       {role.privilages.map(privilage => (
-                        <tr style={{whiteSpace: 'normal'}}>{privilage.label}</tr>
+                        <tr>{privilage.label}</tr>
                       ))}
-                      <td>
+                      <td className="thStyle">
                         <ButtonGroup>
                           <Button size="sm" color="primary" onClick={() => this.hideHeader()} tag={Link} to={"/roles/"+ role.label}>Edit</Button>
                           <Button size="sm" color="danger" disabled>Delete</Button>

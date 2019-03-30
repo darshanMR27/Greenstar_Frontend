@@ -128,19 +128,19 @@ class HolidayEdit extends Component {
         <Form onSubmit={this.holidaySubmit}>
           <div className="row">
                 <FormGroup className="col-md-3 mb-3">
-                    <Label for="holidayDate">Holiday Date</Label>
+                    <Label for="holidayDate" style={{color:'white'}}>Holiday Date</Label>
                     <DatePicker selected={this.state.holidayDate} className="datePicker" placeholderText="Select Holiday Date" onChange={this.handleHolidayDate} dateFormat="dd/MM/yyyy"/>
                 </FormGroup>
                 <FormGroup className="col-md-3 mb-3">
-                    <Label for="holidayDesc">Holiday Description</Label>
+                    <Label for="holidayDesc" style={{color:'white'}}>Holiday Description</Label>
                     <Input type="text" ref="holidayDesc" name="holidayDesc" id="holidayDesc" placeholder="Enter Holiday Description" onChange={e => this.onChange(e)}  value={holidayDesc}/>
                 </FormGroup>
             </div>
-            <div>
+            {/* <div>
               <FormGroup className="col-md-3 mb-3">
-                    <Label>Is Public holiday: <Input type="checkbox" checked={this.state.isPublic} onChange={this.toggleChange} /></Label>
+                    <Label style={{color:'white'}}>Is Public holiday: <Input type="checkbox" checked={this.state.isPublic} onChange={this.toggleChange} /></Label>
               </FormGroup>
-            </div>
+            </div> */}
             <div>
               <FormGroup>   
                 <Button color="primary" type="submit">Save</Button>{' '}
