@@ -83,25 +83,23 @@ componentDidMount(){
           </div>
             <div style={showHide}>
                 <h2>List Holidays</h2>
-                <Table className="mt-4">
+                <Table className="mt-4 tableStyle">
                   <thead>
                     <tr>
-                      <th width="20%">Holiday Date</th>
-                      <th width="20%">Holiday Description</th>
-                      <th width="20%">Public Holiday</th>
-                      <th width="20%">Action</th>
+                      <th className="thStyle" width="20%">Holiday Date</th>
+                      <th className="thStyle" width="20%">Holiday Description</th>
+                      <th className="thStyle" width="20%">Action</th>
                     </tr>
                   </thead>
                   <tbody style={{color: '#dee2e6'}}>
                   {holidays.map(holiday => (
                     <tr key={holiday.id}>
-                      <td>{holiday.date}</td>
-                      <td>{holiday.details}</td>
-                      <td>{holiday.publicHoliday}</td>
-                      <td>
+                      <td className="thStyle">{holiday.date}</td>
+                      <td className="thStyle">{holiday.details}</td>
+                      <td className="thStyle">
                         <ButtonGroup>
                           <Button size="sm" color="primary" onClick={() => this.hideHeader()} tag={Link} to={"/holidays/"+ holiday.id}>Edit</Button>
-                          <Button size="sm" color="danger" onClick={() => this.remove(holiday.id)}>Delete</Button>
+                          <Button size="sm" color="danger" onClick={() => this.remove(holiday.id)} disabled>Delete</Button>
                         </ButtonGroup>
                       </td>
                     </tr> ))}

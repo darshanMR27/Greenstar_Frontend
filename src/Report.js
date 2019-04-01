@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Label} from 'reactstrap';
+import { Button, Label, Container, Form, FormGroup} from 'reactstrap';
 import Select from 'react-select';
 import "@kenshooui/react-multi-select/dist/style.css";
 import axios from 'axios';
@@ -323,9 +323,9 @@ componentDidMount(){
              }
            if(!dateLoaded ) {
               headSecondRow.push(
-                <th row='1' className="thStyle">Attendance</th>,
-                <th row='1' className="thStyle">Discipline</th>,
-                <th row='1' className="thStyle">Home Work</th>);
+                <th row='1' className="thStyle"><tr>A</tr><tr>t</tr><tr>t</tr><tr>e</tr><tr>n</tr><tr>d</tr><tr>a</tr><tr>n</tr><tr>c</tr><tr>e</tr></th>,
+                <th row='1' className="thStyle"><tr>D</tr><tr>i</tr><tr>s</tr><tr>c</tr><tr>i</tr><tr>p</tr><tr>l</tr><tr>i</tr><tr>n</tr><tr>e</tr></th>,
+                <th row='1' className="thStyle"><tr>H</tr><tr>o</tr><tr>m</tr><tr>e</tr><tr>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tr></tr>w</tr><tr>o</tr><tr>r</tr><tr>k</tr></th>);
             }  
          }
           dateLoaded = true;
@@ -349,42 +349,44 @@ componentDidMount(){
         const showSecRepHide = {'display': this.state.showSecRepForm ? 'block' : 'none'};
         return (
           <div className="dashboard">
-            <tr className="row">
-                <td className="col-md-3 mb-3 monthPickerClass">
-                    <Label for="joiningDate">From Date</Label>
+            <Container>
+            <Form className="row">
+                <FormGroup className="col-md-3 mb-3">
+                    <Label for="fromDate" style={{color:'white'}}>From Date</Label>
                     <DatePicker selected={this.state.fromDate} className="datePicker" placeholderText="Select From Date" onChange={this.handleFromDateChange} dateFormat="yyyy-MM-dd"/>
-                </td>
-                <td className="col-md-3 mb-3 monthPickerClass">
-                    <Label for="joiningDate">To Date</Label>
+                </FormGroup>
+                <FormGroup className="col-md-3 mb-3">
+                    <Label for="toDate" style={{color:'white'}}>To Date</Label>
                     <DatePicker selected={this.state.toDate} className="datePicker" placeholderText="Select To Date" onChange={this.handleToDateChange} dateFormat="yyyy-MM-dd"/>
-                </td>
-                <td className="col-md-3 mb-3">
-                    <Label for="reportType">Report Type</Label>
+                </FormGroup>
+                <FormGroup className="col-md-3 mb-3">
+                    <Label for="reportType" style={{color:'white'}}>Report Type</Label>
                     <Select options={ reportTypes } name="reportType" id="reportType" onChange={this.handleReportTypeChange} value={selectedReportType}/>
-                </td>
-              </tr>
+                </FormGroup>
+              </Form>
+              </Container>
               <div style={showIndReportSel}>
-                  <tr className="row" >
-                    <td className="col-md-3 mb-3">
-                        <Label for="name">School Name</Label>
+                  <Form className="row" >
+                    <FormGroup className="col-md-3 mb-3">
+                        <Label for="name" style={{color:'white'}}>School Name</Label>
                         <Select options={ schools } name="school" id="school" onChange={this.handleSchoolChange} value={selectedSchool}/>
-                    </td>
-                    <td className="col-md-3 mb-3">
-                        <Label for="grade">Class or Grade</Label>
+                    </FormGroup>
+                    <FormGroup className="col-md-3 mb-3">
+                        <Label for="grade" style={{color:'white'}}>Class or Grade</Label>
                         <Select options={ grades } name="grade" id="grade" onChange={this.handleClassChange} value={selectedGrade}/>
-                    </td>
-                    <td className="col-md-3 mb-3" style={showGrpReportSel}>
-                        <Label for="section">Section</Label>
+                    </FormGroup>
+                    <FormGroup className="col-md-3 mb-3" style={showGrpReportSel}>
+                        <Label for="section" style={{color:'white'}}>Section</Label>
                         <Select options={ sections } name="section" id="section" onChange={this.handleSectionChange} value={selectedSec}/>
-                    </td>
-                    <td className="col-md-3 mb-3" style={showGrpReportSel}>
-                        <Label for="section">Group</Label>
+                    </FormGroup>
+                    <FormGroup className="col-md-3 mb-3" style={showGrpReportSel}>
+                        <Label for="section" style={{color:'white'}}>Group</Label>
                         <Select options={ groups } name="group" id="group" onChange={this.handleGroupChange} value={selectedGroup}/>
-                    </td>
-                    <td className="col-md-3 mb-3">   
+                    </FormGroup>
+                    <FormGroup className="col-md-3 mb-3">   
                         <Button color="primary" className="goButton"  onClick={() => this.onSubmit()}>View</Button>{' '}
-                    </td>
-                  </tr>
+                    </FormGroup>
+                  </Form>
               </div>
               <div style={showErrorReport}>
                   <p style={{color: 'red'}}>{error}</p>
@@ -392,9 +394,9 @@ componentDidMount(){
               <div className="report" style={showIndRepHide}>
                   {<table data={ indReportData } className="tableStyle" >
             <thead><tr>
-                    <th className="thStyle"row='0' rowSpan='2'  dataField='rollNum' isKey  style={{align:'cente'}} >Roll No</th>
-                    <th className="thStyle"row='0' rowSpan='2' dataField="studentName">Student Name</th>
-                    <th className="thStyle"row='0' rowSpan='2'  dataField='caste'>Caste</th>{theadRows}
+                    <th className="thStyle" row='0' rowSpan='2'  dataField='rollNum' isKey  style={{align:'cente'}} >Roll No</th>
+                    <th className="thStyle" row='0' rowSpan='2' dataField="studentName">Student Name</th>
+                    <th className="thStyle" row='0' rowSpan='2'  dataField='caste'>Caste</th>{theadRows}
                     
                     </tr>
                     <tr>{headSecondRow  }</tr>
@@ -410,11 +412,11 @@ componentDidMount(){
             <div className="report" style={showGrpRepHide}>
                     {<table className="tableStyle" >
                       <thead><tr>
-                              <th className="thStyle"row='0' rowSpan='2'  dataField='rollNum' isKey  style={{align:'cente'}} >Group Name</th>
-                              <th className="thStyle"row='0' rowSpan='2'>Attendance</th>
-                              <th className="thStyle"row='0' rowSpan='2'>Discipline</th>
-                              <th className="thStyle"row='0' rowSpan='2'>Home Work</th>
-                              <th className="thStyle"row='0' rowSpan='2'>Total</th>
+                              <th className="thStyle" row='0' rowSpan='2'  dataField='rollNum' isKey  style={{align:'cente'}} >Group Name</th>
+                              <th className="thStyle" row='0' rowSpan='2'>Attendance</th>
+                              <th className="thStyle" row='0' rowSpan='2'>Discipline</th>
+                              <th className="thStyle" row='0' rowSpan='2'>Home Work</th>
+                              <th className="thStyle" row='0' rowSpan='2'>Total</th>
                             </tr>
                           </thead>
                             <tbody>

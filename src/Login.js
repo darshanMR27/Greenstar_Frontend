@@ -14,7 +14,7 @@ import App from './App';
 function validate(roleName, password) {
     // we are going to store errors for all fields
     // in a signle array
-    alert(roleName +", Pwd = "+password);
+   // alert(roleName +", Pwd = "+password);
     const errors = [];
     if(roleName === '' || roleName === "undefined"){
         errors.push("Role Name cannot be empty");
@@ -58,6 +58,12 @@ class Login extends Component {
         }
     }
 
+    resetForm = async () => {
+        this.setState({
+            roleName:'',
+            password:''
+        })
+    }
     handleSubmit = async () => {
         const { roleName, password} = this.state;
         const errors = validate(roleName, password);
@@ -90,30 +96,31 @@ class Login extends Component {
         //const {header,main,footer} = this.props; 
         
         return (
-            <Router>
             <div  className="dashboard">
                 <Container>
-                    <Form style={{paddingLeft: '25em'}}>
+                    <Form className="loginForm">
+                        {errors.map(error =>(
+                            <p key={error} className="loginErrorText">{error}</p>
+                        ))}
                         <FormGroup className="col-md-5 mb-5">
                             <Label for="roleName">Role Name</Label>
                             <Input type="text" ref="roleName" name="roleName" id="roleName" placeholder="Enter Role Name" onChange={e => this.onChange(e)}  value={roleName}/>
                         </FormGroup>
                         <FormGroup className="col-md-5 mb-5">
                             <Label for="password">Password</Label>
-                            
-                                <Input ref="password"  name="password" placeholder="Enter Password" 
+                            <Input ref="password"  name="password" placeholder="Enter Password" 
                                     type="password"
                                     onChange={e => this.onChange(e)} 
                                     value={password} />
                             
                         </FormGroup>
                         <FormGroup style={{paddingLeft:'1.2em'}}>
-                            <Button color="success" onClick={() => this.handleSubmit()} tag={Link} to="/">Login</Button>{'     '}
+                            <Button color="success" onClick={() => this.handleSubmit()}>Login</Button>{'     '}
+                            <Button color="success" onClick={() => this.resetForm()}>Reset</Button>{'     '}
                         </FormGroup>
                     </Form>
                 </Container>
             </div>
-            </Router>
         );
     }
 }

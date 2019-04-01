@@ -7,6 +7,8 @@ import "@kenshooui/react-multi-select/dist/style.css";
 import axios from 'axios';
 import MonthPickerInput from 'react-month-picker-input';
 import 'react-month-picker-input/dist/react-month-picker-input.css';
+import "./cssstyles/Common.css";
+import "./cssstyles/index.css";
 
 function drawAttendanceStar(attendanceDetails, ctx) {
   //alert(attendanceDetails.length);
@@ -1275,8 +1277,9 @@ class Dashboard extends Component {
         //alert('Group = ' +selectedGroupId);
         const selectedStudId = this.state.selectedStudent.id;
         //alert('Student = ' +selectedStudId);
+        
         if(selectedStudId !== undefined){
-          axios.get("http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/star/student/"+selectedStudId+"?month="+this.state.month)
+          axios.get("http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/star/student/"+selectedStudId+"?month="+this.state.starDateFormat)
           .then(result => {
             console.log(result);
             drawAttendanceStar(result.data.attendanceDetails, ctx);
@@ -1296,7 +1299,7 @@ class Dashboard extends Component {
           });  
           this.setState({showForm: true}); 
         } else {
-          axios.get("http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/star/group/"+selectedGroupId+"?month="+this.state.month)
+          axios.get("http://ec2-35-154-78-152.ap-south-1.compute.amazonaws.com:8080/api/v1/star/group/"+selectedGroupId+"?month="+this.state.starDateFormat)
           .then(result => {
             console.log(result);
             drawAttendanceStar(result.data.attendanceDetails, ctx);
@@ -1319,8 +1322,9 @@ class Dashboard extends Component {
       }
 
       handleSelect = (month, year) => {
-        console.log(month, year);
-        this.setState({month});
+        var monthArray = month.split('/');  
+        var starDateFormat = year + '/' + monthArray[0];
+        this.setState({starDateFormat});
       }
 
     render() {
@@ -1343,53 +1347,50 @@ class Dashboard extends Component {
             <div className="dashboard">
             <Container>
                   <Form className="row">
-                      <FormGroup className="col-md-3 mb-3 monthPickerClass">
-                          <Label for="joiningDate">Pick A Month</Label>
-                          <MonthPickerInput className="datePicker" mode="calendarOnly" format="yyyy/MM" onChange={this.handleSelect} closeOnSelect={true}/>
+                      <FormGroup className="col-md-3 mb-3">
+                          <Label for="month" style={{color:'white'}}>Pick A Month</Label>
+                          <MonthPickerInput className="monthPickerClass" mode="calendarOnly" onChange={this.handleSelect} closeOnSelect={true}/>
                       </FormGroup>
                       <FormGroup className="col-md-3 mb-3">
-                          <Label for="name">School Name</Label>
+                          <Label for="name" style={{color:'white'}}>School Name</Label>
                           <Select options={ schools } name="school" id="school" onChange={this.handleSchoolChange} value={selectedSchool}/>
                       </FormGroup>
                       <FormGroup className="col-md-3 mb-3">
-                          <Label for="grade">Class or Grade</Label>
+                          <Label for="grade" style={{color:'white'}}>Class or Grade</Label>
                           <Select options={ grades } name="grade" id="grade" onChange={this.handleClassChange} value={selectedGrade}/>
                       </FormGroup>
                       <FormGroup className="col-md-3 mb-3">
-                          <Label for="section">Section</Label>
+                          <Label for="section" style={{color:'white'}}>Section</Label>
                           <Select options={ sections } name="section" id="section" onChange={this.handleSectionChange} value={selectedSec}/>
                       </FormGroup>
                       <FormGroup className="col-md-3 mb-3">
-                          <Label for="section">Group</Label>
+                          <Label for="section" style={{color:'white'}}>Group</Label>
                           <Select options={ groups } name="group" id="group" onChange={this.handleGroupChange} value={selectedGroup}/>
                       </FormGroup>
                       <FormGroup className="col-md-3 mb-3">
-                          <Label for="student">Student</Label>
+                          <Label for="student" style={{color:'white'}}>Student</Label>
                           <Select options={ students } name="student" id="student" onChange={this.handleStudentChange} value={selectedStudent}/>
                       </FormGroup>
                       <FormGroup>   
                           <Button color="primary" className="goButton"  onClick={() => this.onSubmit()}>Go</Button>{' '}
                       </FormGroup>
-                  </Form>
-              </Container>
-              <div>
-                  <tr style={showHide} className="row">
-                    <td className="col-md-3 mb-3">
-                      <canvas className="starAlign-att" ref="attCanvas" width="490" height="400"></canvas>
-                      <text className="star-caption-att">Attendance</text>
-                    </td>
-                    <td className="col-md-4 mb-4">
-                      <canvas className="starAlign-hw" ref="hwCanvas" width="490" height="400"></canvas>
-                      <text className="star-caption-hw">Home Work</text>
-                    </td>
-                    <td className="col-md-5 mb-5">
-                      <canvas className="starAlign-dis" ref="disCanvas" width="490" height="400"></canvas>
-                      <text className="star-caption-dis">Discipline</text>
-                    </td>
-                  </tr>
-              </div>
-        </div>
-        );
+                      </Form>
+                      <div style={showHide}>
+                        <div className="starAlign">
+                          <canvas className="starAlign-att" ref="attCanvas" width="490" height="400"></canvas>
+                          <text className="star-caption-att">Attendance</text>
+                        </div>
+                        <div className="starAlign">
+                          <canvas className="starAlign-hw" ref="hwCanvas" width="490" height="400"></canvas>
+                          <text className="star-caption-hw">Home Work</text>
+                        </div>
+                        <div className="starAlign">
+                          <canvas className="starAlign-dis" ref="disCanvas" width="490" height="400"></canvas>
+                          <text className="star-caption-dis">Discipline</text>
+                        </div>
+                      </div>
+              </Container> 
+        </div>);
     }
 }
 export default Dashboard;
